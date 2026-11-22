@@ -1,7 +1,9 @@
 import { useEffect, useState } from 'react';
+import { ClipboardList, LogOut, PlusCircle, Users } from 'lucide-react';
 import { NavLink, Outlet, useLocation, useNavigate } from 'react-router-dom';
 import { errorMessage } from '../api/client';
 import { useAuth } from '../auth/AuthContext';
+import { Icon } from './Icon';
 import { ErrorBox, RoleBadge } from './ui';
 
 const TITLES: Record<string, string> = {
@@ -48,10 +50,16 @@ export function Layout() {
 
           <nav aria-label="Navegación principal" className="main-nav">
             <NavLink to="/reports" end>
-              Reportes
+              <Icon as={ClipboardList} /> Reportes
             </NavLink>
-            <NavLink to="/reports/new">Nuevo análisis</NavLink>
-            {hasRole('admin') && <NavLink to="/users">Usuarios</NavLink>}
+            <NavLink to="/reports/new">
+              <Icon as={PlusCircle} /> Nuevo análisis
+            </NavLink>
+            {hasRole('admin') && (
+              <NavLink to="/users">
+                <Icon as={Users} /> Usuarios
+              </NavLink>
+            )}
           </nav>
 
           {user && (
@@ -61,7 +69,7 @@ export function Layout() {
                 <RoleBadge role={user.role} />
               </div>
               <button type="button" className="btn btn-outline btn-small" onClick={handleLogout}>
-                Cerrar sesión
+                <Icon as={LogOut} /> Cerrar sesión
               </button>
             </div>
           )}

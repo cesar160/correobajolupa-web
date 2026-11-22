@@ -152,6 +152,9 @@ a {
 }
 
 .main-nav a {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
   font-size: 0.875rem;
   text-decoration: none;
   color: var(--color-smoke);
@@ -302,6 +305,14 @@ a {
 
 /* ---------- Botones y campos ---------- */
 
+.btn svg,
+.main-nav svg,
+.badge-mark svg,
+.error-icon svg {
+  flex: none;
+  display: block;
+}
+
 .btn {
   font: inherit;
   font-size: 0.875rem;
@@ -358,11 +369,6 @@ a {
 .btn-danger:hover {
   background: var(--color-ink);
   color: var(--color-eggshell);
-}
-
-.btn-danger::before {
-  content: '✕';
-  font-size: 0.75rem;
 }
 
 .btn-small {
@@ -708,7 +714,8 @@ tbody tr:last-child td {
 }
 
 .badge-mark {
-  font-size: 0.7rem;
+  display: inline-flex;
+  align-items: center;
 }
 
 .badge-completed,

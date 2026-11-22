@@ -1,7 +1,9 @@
 import { useState, type FormEvent } from 'react';
+import { Eye, EyeOff, UserPlus } from 'lucide-react';
 import { Link, Navigate, useNavigate } from 'react-router-dom';
 import { errorMessage } from '../api/client';
 import { useAuth } from '../auth/AuthContext';
+import { Icon } from '../components/Icon';
 import { ErrorBox } from '../components/ui';
 
 export function RegisterPage() {
@@ -108,7 +110,7 @@ export function RegisterPage() {
                   aria-pressed={showPassword}
                   onClick={() => setShowPassword((visible) => !visible)}
                 >
-                  {showPassword ? 'Ocultar' : 'Mostrar'}
+                  <Icon as={showPassword ? EyeOff : Eye} /> {showPassword ? 'Ocultar' : 'Mostrar'}
                 </button>
               </div>
             </div>
@@ -134,7 +136,7 @@ export function RegisterPage() {
             </div>
 
             <button type="submit" className="btn btn-primary" disabled={busy}>
-              {busy ? 'Creando cuenta…' : 'Crear cuenta'}
+              <Icon as={UserPlus} /> {busy ? 'Creando cuenta…' : 'Crear cuenta'}
             </button>
           </form>
 

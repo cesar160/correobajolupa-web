@@ -1,4 +1,6 @@
 import { useEffect, useId, useRef } from 'react';
+import { Trash2 } from 'lucide-react';
+import { Icon } from './Icon';
 
 /**
  * Confirmación de una acción destructiva con <dialog> nativo: el navegador
@@ -40,7 +42,7 @@ export function ConfirmDialog({
           Cancelar
         </button>
         <button type="button" className="btn btn-danger" disabled={busy} onClick={onConfirm}>
-          {busy ? 'Eliminando…' : confirmLabel}
+          <Icon as={Trash2} /> {busy ? 'Eliminando…' : confirmLabel}
         </button>
       </div>
     </dialog>

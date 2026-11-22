@@ -1,6 +1,8 @@
 import { useState, type ChangeEvent, type FormEvent } from 'react';
+import { ClipboardPaste, FileUp } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { api, errorMessage } from '../api/client';
+import { Icon } from '../components/Icon';
 import { ErrorBox, PageHeader, Tabs } from '../components/ui';
 
 export function NewReportPage() {
@@ -86,7 +88,7 @@ export function NewReportPage() {
                   {file && <p className="file-name">Seleccionado: {file.name}</p>}
                 </div>
                 <button type="submit" className="btn btn-primary" disabled={busy}>
-                  {busy ? 'Enviando…' : 'Analizar archivo'}
+                  <Icon as={FileUp} /> {busy ? 'Enviando…' : 'Analizar archivo'}
                 </button>
               </form>
             ),
@@ -113,7 +115,7 @@ export function NewReportPage() {
                   />
                 </div>
                 <button type="submit" className="btn btn-primary" disabled={busy}>
-                  {busy ? 'Enviando…' : 'Analizar texto'}
+                  <Icon as={ClipboardPaste} /> {busy ? 'Enviando…' : 'Analizar texto'}
                 </button>
               </form>
             ),

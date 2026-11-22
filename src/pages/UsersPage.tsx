@@ -1,6 +1,8 @@
 import { useCallback, useEffect, useState, type FormEvent } from 'react';
+import { Filter, Save } from 'lucide-react';
 import { api, errorMessage } from '../api/client';
 import type { Role, User } from '../api/types';
+import { Icon } from '../components/Icon';
 import { EmptyState, ErrorBox, formatDate, Loading, PageHeader, RoleBadge } from '../components/ui';
 
 const ROLES: Role[] = ['reporter', 'analyst', 'admin'];
@@ -121,7 +123,7 @@ export function UsersPage() {
             </select>
           </div>
           <button type="submit" className="btn btn-outline">
-            Aplicar filtro
+            <Icon as={Filter} /> Aplicar filtro
           </button>
         </form>
       </search>
@@ -196,7 +198,7 @@ export function UsersPage() {
                 : 'Sin cambios pendientes.'}
             </p>
             <button type="submit" className="btn btn-primary" disabled={busy || Object.keys(drafts).length === 0}>
-              {busy ? 'Guardando…' : 'Guardar cambios'}
+              <Icon as={Save} /> {busy ? 'Guardando…' : 'Guardar cambios'}
             </button>
           </div>
         </form>

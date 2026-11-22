@@ -1,7 +1,9 @@
 import { useState, type FormEvent } from 'react';
+import { Eye, EyeOff, LogIn } from 'lucide-react';
 import { Link, Navigate, useLocation, useNavigate } from 'react-router-dom';
 import { errorMessage } from '../api/client';
 import { useAuth } from '../auth/AuthContext';
+import { Icon } from '../components/Icon';
 import { ErrorBox } from '../components/ui';
 
 export function LoginPage() {
@@ -92,13 +94,13 @@ export function LoginPage() {
                   aria-pressed={showPassword}
                   onClick={() => setShowPassword((visible) => !visible)}
                 >
-                  {showPassword ? 'Ocultar' : 'Mostrar'}
+                  <Icon as={showPassword ? EyeOff : Eye} /> {showPassword ? 'Ocultar' : 'Mostrar'}
                 </button>
               </div>
             </div>
 
             <button type="submit" className="btn btn-primary" disabled={busy}>
-              {busy ? 'Entrando…' : 'Entrar'}
+              <Icon as={LogIn} /> {busy ? 'Entrando…' : 'Entrar'}
             </button>
           </form>
 

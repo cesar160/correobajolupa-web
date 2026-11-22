@@ -1,8 +1,10 @@
 import { useCallback, useEffect, useState } from 'react';
+import { Trash2 } from 'lucide-react';
 import { Link, useNavigate, useParams } from 'react-router-dom';
 import { ApiError, api, errorMessage } from '../api/client';
 import type { Finding, ReportDetail } from '../api/types';
 import { ConfirmDialog } from '../components/ConfirmDialog';
+import { Icon } from '../components/Icon';
 import {
   AuthBadge,
   EmptyState,
@@ -120,7 +122,7 @@ export function ReportDetailPage() {
         description={`Recibido de ${report.fromAddress ?? 'dirección desconocida'} el ${formatDate(report.createdAt)}.`}
         actions={
           <button type="button" className="btn btn-danger" onClick={() => setConfirming(true)}>
-            Eliminar reporte
+            <Icon as={Trash2} /> Eliminar reporte
           </button>
         }
       />

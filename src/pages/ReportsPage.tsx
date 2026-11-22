@@ -1,8 +1,10 @@
 import { useCallback, useEffect, useState } from 'react';
+import { Filter, Plus, Trash2 } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { api, errorMessage } from '../api/client';
 import type { ReportStatus, ReportSummary } from '../api/types';
 import { ConfirmDialog } from '../components/ConfirmDialog';
+import { Icon } from '../components/Icon';
 import {
   EmptyState,
   ErrorBox,
@@ -89,7 +91,7 @@ export function ReportsPage() {
         description="Correos enviados a análisis. El estado se actualiza solo mientras hay análisis en curso."
         actions={
           <Link className="btn btn-primary" to="/reports/new">
-            Nuevo análisis
+            <Icon as={Plus} /> Nuevo análisis
           </Link>
         }
       />
@@ -122,7 +124,7 @@ export function ReportsPage() {
             </select>
           </div>
           <button type="submit" className="btn btn-outline">
-            Aplicar filtro
+            <Icon as={Filter} /> Aplicar filtro
           </button>
         </form>
       </search>
@@ -183,7 +185,7 @@ export function ReportsPage() {
                       className="btn btn-ghost btn-small"
                       onClick={() => setPendingDelete(report)}
                     >
-                      Eliminar<span className="visually-hidden"> el reporte {report.subject ?? report.id}</span>
+                      <Icon as={Trash2} /> Eliminar<span className="visually-hidden"> el reporte {report.subject ?? report.id}</span>
                     </button>
                   </td>
                 </tr>

@@ -5,7 +5,22 @@ import {
   useState,
   type ReactNode,
 } from 'react';
+import {
+  ArrowDown,
+  ArrowUp,
+  Check,
+  CircleAlert,
+  CircleCheck,
+  CircleX,
+  Clock,
+  LoaderCircle,
+  Minus,
+  TriangleAlert,
+  X,
+} from 'lucide-react';
 import type { AuthResult, Priority, ReportStatus, Role } from '../api/types';
+import type { LucideIcon } from 'lucide-react';
+import { Icon } from './Icon';
 
 export function formatDate(iso: string): string {
   const date = new Date(iso);
@@ -21,7 +36,9 @@ export function ErrorBox({ message }: { message: string }) {
   if (!message) return null;
   return (
     <div className="error-box" role="alert">
-      <span aria-hidden="true">!</span>
+      <span className="error-icon">
+        <Icon as={CircleAlert} size={14} />
+      </span>
       <span>{message}</span>
     </div>
   );
@@ -67,11 +84,19 @@ const STATUS_LABEL: Record<ReportStatus, string> = {
   failed: 'Fallido',
 };
 
+const STATUS_ICON: Record<ReportStatus, LucideIcon> = {
+  queued: Clock,
+  processing: LoaderCircle,
+  completed: CircleCheck,
+  limited: TriangleAlert,
+  failed: CircleX,
+};
+
 export function StatusBadge({ status }: { status: ReportStatus }) {
   return (
     <span className={`badge badge-status badge-${status}`}>
-      <span className="badge-mark" aria-hidden="true">
-        {status === 'completed' ? '●' : status === 'failed' ? '✕' : status === 'limited' ? '▲' : '○'}
+      <span className="badge-mark">
+        <Icon as={STATUS_ICON[status]} size={13} />
       </span>
       {STATUS_LABEL[status]}
     </span>
@@ -84,12 +109,18 @@ const PRIORITY_LABEL: Record<Priority, string> = {
   high: 'Alta',
 };
 
+const PRIORITY_ICON: Record<Priority, LucideIcon> = {
+  high: ArrowUp,
+  medium: Minus,
+  low: ArrowDown,
+};
+
 export function PriorityBadge({ priority }: { priority: Priority | null }) {
   if (!priority) return <span className="muted">—</span>;
   return (
     <span className={`badge badge-priority badge-${priority}`}>
-      <span className="badge-mark" aria-hidden="true">
-        {priority === 'high' ? '▲' : priority === 'medium' ? '●' : '○'}
+      <span className="badge-mark">
+        <Icon as={PRIORITY_ICON[priority]} size={13} />
       </span>
       {PRIORITY_LABEL[priority]}
     </span>
@@ -113,11 +144,18 @@ const AUTH_LABEL: Record<AuthResult, string> = {
   unknown: 'unknown',
 };
 
+const AUTH_ICON: Record<AuthResult, LucideIcon> = {
+  pass: Check,
+  fail: X,
+  none: Minus,
+  unknown: Minus,
+};
+
 export function AuthBadge({ label, value }: { label: string; value: AuthResult }) {
   return (
     <span className={`badge badge-auth badge-auth-${value}`}>
-      <span className="badge-mark" aria-hidden="true">
-        {value === 'pass' ? '✓' : value === 'fail' ? '✕' : '·'}
+      <span className="badge-mark">
+        <Icon as={AUTH_ICON[value]} size={13} />
       </span>
       {label}: {AUTH_LABEL[value]}
     </span>
