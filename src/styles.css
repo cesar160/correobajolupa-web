@@ -450,6 +450,96 @@ textarea:is(:user-invalid, .user-invalid-fallback) {
   color: var(--color-smoke);
 }
 
+.error-msg {
+  display: block;
+  color: var(--color-ink);
+  font-size: 0.8125rem;
+  margin-block-start: 0.5rem;
+  border-inline-start: 2px solid var(--color-ink);
+  padding-inline-start: 0.5rem;
+}
+
+/* ---------- Seguridad de la contraseña ---------- */
+
+.password-strength {
+  inline-size: 100%;
+  background: var(--color-warm-taupe);
+  border-radius: var(--radius-cards);
+  padding: 1rem 1.25rem;
+  margin-block: 0.5rem 0.75rem;
+}
+
+.strength-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+
+.strength-level {
+  font-size: 0.8125rem;
+}
+
+.strength-meter {
+  appearance: none;
+  border: 0 solid;
+  overflow: clip;
+  border-radius: var(--radius-full);
+  background: var(--color-stone);
+  inline-size: 100%;
+  block-size: 0.5rem;
+  margin-block: 0.5rem 0.75rem;
+}
+
+.strength-meter::-webkit-progress-bar {
+  background: transparent;
+}
+
+.strength-meter::-webkit-progress-value {
+  background: var(--color-ink);
+  border-radius: var(--radius-full);
+  transition: inline-size 200ms ease;
+}
+
+.strength-meter::-moz-progress-bar {
+  background: var(--color-ink);
+  border-radius: var(--radius-full);
+  transition: inline-size 200ms ease;
+}
+
+.rules-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  gap: 0.35rem;
+  font-size: 0.8125rem;
+  color: var(--color-smoke);
+}
+
+.rule-item {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.rule-item[data-met='true'] {
+  color: var(--color-ink);
+}
+
+.rule-item[data-met='false'] svg {
+  color: var(--color-ash);
+}
+
+.rule-kind {
+  margin-inline-start: auto;
+  font-size: 0.6875rem;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--color-ash);
+}
+
 /* ---------- Autenticación ---------- */
 
 .auth-layout {

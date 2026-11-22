@@ -4,6 +4,7 @@ import { Link, Navigate, useNavigate } from 'react-router-dom';
 import { errorMessage } from '../api/client';
 import { useAuth } from '../auth/AuthContext';
 import { Icon } from '../components/Icon';
+import { PasswordStrength } from '../components/PasswordStrength';
 import { ErrorBox } from '../components/ui';
 
 export function RegisterPage() {
@@ -15,10 +16,13 @@ export function RegisterPage() {
   const [password, setPassword] = useState('');
   const [inviteCode, setInviteCode] = useState('');
   const [showPassword, setShowPassword] = useState(false);
+  const [passwordTouched, setPasswordTouched] = useState(false);
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState('');
 
   if (user) return <Navigate to="/reports" replace />;
+
+  const passwordInvalid = passwordTouched && (password.length < 12 || password.length > 128);
 
   const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
@@ -88,8 +92,9 @@ export function RegisterPage() {
             <div className="field">
               <label htmlFor="register-password">Contraseña</label>
               <span id="register-password-hint" className="hint">
-                Mínimo 12 caracteres. El navegador puede sugerirte una contraseña segura.
+                Lo obligatorio viene del contrato de la API; lo demás son recomendaciones.
               </span>
+              <PasswordStrength password={password} rulesId="register-password-rules" />
               <div className="password-row">
                 <input
                   id="register-password"
@@ -98,11 +103,20 @@ export function RegisterPage() {
                   autoComplete="new-password"
                   minLength={12}
                   maxLength={128}
-                  aria-describedby="register-password-hint"
+                  aria-describedby={[
+                    'register-password-hint',
+                    'register-password-rules',
+                    passwordInvalid ? 'register-password-error' : null,
+                  ]
+                    .filter(Boolean)
+                    .join(' ')}
+                  aria-invalid={passwordInvalid ? 'true' : 'false'}
                   enterKeyHint="next"
                   required
                   value={password}
                   onChange={(event) => setPassword(event.target.value)}
+                  onBlur={() => setPasswordTouched(true)}
+                  onInvalid={() => setPasswordTouched(true)}
                 />
                 <button
                   type="button"
@@ -113,6 +127,11 @@ export function RegisterPage() {
                   <Icon as={showPassword ? EyeOff : Eye} /> {showPassword ? 'Ocultar' : 'Mostrar'}
                 </button>
               </div>
+              {passwordInvalid && (
+                <span id="register-password-error" className="error-msg">
+                  Usa entre 12 y 128 caracteres.
+                </span>
+              )}
             </div>
 
             <div className="field">
