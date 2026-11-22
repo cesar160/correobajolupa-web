@@ -601,12 +601,28 @@ textarea:is(:user-invalid, .user-invalid-fallback) {
   overflow: hidden;
 }
 
+.sphere-area {
+  display: grid;
+  place-items: center;
+  inline-size: min(100%, 22rem);
+  block-size: 22rem;
+}
+
 .sphere {
   inline-size: 14rem;
   block-size: 14rem;
   border-radius: var(--radius-full);
   background: radial-gradient(circle at 32% 28%, #ff8a65 0%, var(--color-ember-orange) 24%, var(--color-violet-spark) 62%, #2b0b6b 100%);
   filter: blur(1px);
+  /* Base identidad: evita crear un contexto de apilamiento solo al moverla. */
+  translate: var(--sphere-x, 0px) var(--sphere-y, 0px);
+  pointer-events: none;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .sphere {
+    transition: translate 260ms ease-out;
+  }
 }
 
 .auth-art-caption {

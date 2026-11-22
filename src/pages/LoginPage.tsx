@@ -4,6 +4,7 @@ import { Link, Navigate, useLocation, useNavigate } from 'react-router-dom';
 import { errorMessage } from '../api/client';
 import { useAuth } from '../auth/AuthContext';
 import { Icon } from '../components/Icon';
+import { InteractiveSphere } from '../components/InteractiveSphere';
 import { ErrorBox } from '../components/ui';
 
 export function LoginPage() {
@@ -111,7 +112,7 @@ export function LoginPage() {
       </section>
 
       <aside className="auth-art" aria-hidden="true">
-        <div className="sphere" />
+        <InteractiveSphere />
         <p className="auth-art-caption">Correo bajo la lupa</p>
       </aside>
     </div>
