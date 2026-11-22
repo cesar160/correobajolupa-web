@@ -1,0 +1,12 @@
+name: correobajolupa-web
+
+# Este archivo levanta SOLO el front. Para que /api resuelva, el contenedor debe
+# compartir red con el API (ver README, "Integración con el back").
+services:
+  web:
+    build: .
+    environment:
+      API_UPSTREAM: ${API_UPSTREAM:-api:3000}
+    ports:
+      - "${WEB_PORT:-8080}:80"
+    restart: unless-stopped
