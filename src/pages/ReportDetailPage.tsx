@@ -118,6 +118,7 @@ export function ReportDetailPage() {
   return (
     <>
       <PageHeader
+        titleTransitionName="report-title"
         title={report.subject ?? '(sin asunto)'}
         description={`Recibido de ${report.fromAddress ?? 'dirección desconocida'} el ${formatDate(report.createdAt)}.`}
         actions={

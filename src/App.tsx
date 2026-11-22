@@ -1,4 +1,6 @@
-import { Link, Navigate, Route, Routes } from 'react-router-dom';
+import { useEffect, useState } from 'react';
+import { flushSync } from 'react-dom';
+import { Link, Navigate, Route, Routes, useLocation, type Location } from 'react-router-dom';
 import { ProtectedRoute } from './auth/ProtectedRoute';
 import { Layout } from './components/Layout';
 import { LoginPage } from './pages/LoginPage';
@@ -20,9 +22,32 @@ function NotFound() {
   );
 }
 
-export function App() {
+function AnimatedRoutes() {
+  const location = useLocation();
+  const [displayed, setDisplayed] = useState<Location>(location);
+
+  useEffect(() => {
+    if (location.key === displayed.key) return;
+
+    const update = () => flushSync(() => setDisplayed(location));
+    const shiftFocus = () => {
+      document.querySelector<HTMLElement>('h1[tabindex="-1"]')?.focus({ preventScroll: true });
+    };
+
+    if (!document.startViewTransition) {
+      update();
+      shiftFocus();
+      return;
+    }
+
+    // El foco no lo mueve la API de transiciones: hay que llevarlo al encabezado
+    // de la vista nueva para no abandonar a quien navega con teclado o lector.
+    const transition = document.startViewTransition(update);
+    void transition.finished.finally(shiftFocus);
+  }, [location, displayed.key]);
+
   return (
-    <Routes>
+    <Routes location={displayed}>
       <Route path="/" element={<Navigate to="/reports" replace />} />
       <Route path="/login" element={<LoginPage />} />
       <Route path="/register" element={<RegisterPage />} />
@@ -43,4 +68,8 @@ export function App() {
       </Route>
     </Routes>
   );
+}
+
+export function App() {
+  return <AnimatedRoutes />;
 }

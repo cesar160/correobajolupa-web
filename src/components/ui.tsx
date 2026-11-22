@@ -60,15 +60,22 @@ export function PageHeader({
   title,
   description,
   actions,
+  titleTransitionName,
 }: {
   title: string;
   description?: string;
   actions?: ReactNode;
+  titleTransitionName?: string;
 }) {
   return (
     <div className="page-header">
       <div>
-        <h1 tabIndex={-1}>{title}</h1>
+        <h1
+          tabIndex={-1}
+          style={titleTransitionName ? { viewTransitionName: titleTransitionName } : undefined}
+        >
+          {title}
+        </h1>
         {description && <p className="page-description">{description}</p>}
       </div>
       {actions && <div className="page-actions">{actions}</div>}

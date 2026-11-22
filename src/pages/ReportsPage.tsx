@@ -165,7 +165,12 @@ export function ReportsPage() {
               {reports.map((report) => (
                 <tr key={report.id}>
                   <th scope="row">
-                    <Link to={`/reports/${report.id}`}>
+                    <Link
+                      to={`/reports/${report.id}`}
+                      onClick={(event) => {
+                        (event.currentTarget as HTMLElement).style.viewTransitionName = 'report-title';
+                      }}
+                    >
                       {report.subject ?? '(sin asunto)'}
                     </Link>
                   </th>
