@@ -37,8 +37,9 @@ export class ApiError extends Error {
     message: string,
     readonly requestId?: string,
     readonly details?: ErrorResponse['details'],
+    options?: ErrorOptions,
   ) {
-    super(message);
+    super(message, options);
     this.name = 'ApiError';
   }
 }
@@ -85,10 +86,18 @@ async function request<T>(path: string, options: RequestOptions = {}): Promise<T
     });
   } catch (error) {
     if (error instanceof DOMException && error.name === 'AbortError') throw error;
-    throw new ApiError(0, 'network_error', 'No se pudo conectar con la API. Comprueba que el servicio esté disponible.');
+    throw new ApiError(
+      0,
+      'network_error',
+      'No se pudo conectar con la API. Comprueba que el servicio esté disponible.',
+      undefined,
+      undefined,
+      { cause: error },
+    );
   }
 
   const contentType = response.headers.get('content-type') ?? '';
+  const isJson = contentType.includes('application/json');
   let payload: unknown;
   if (response.status === 204) {
     payload = undefined;
@@ -103,13 +112,20 @@ async function request<T>(path: string, options: RequestOptions = {}): Promise<T
   }
 
   if (!response.ok) {
-    const err = payload as Partial<ErrorResponse> | undefined;
+    // nginx devuelve el 413 como HTML. Si no hay JSON del contrato, lo
+    // reconstruimos con el código y un mensaje que diga qué hacer.
+    const err = isJson ? (payload as Partial<ErrorResponse> | undefined) : undefined;
+    const tooLarge = response.status === 413 && !isJson;
     const failure = new ApiError(
       response.status,
-      err?.code ?? 'internal_error',
-      err?.message ?? `La API respondió ${response.status}.`,
+      err?.code ?? (tooLarge ? 'payload_too_large' : 'internal_error'),
+      err?.message ??
+        (tooLarge
+          ? 'El archivo o el texto es demasiado grande. Reduce el tamaño e inténtalo de nuevo.'
+          : `La API respondió ${response.status}.`),
       err?.requestId,
       err?.details,
+      { cause: new Error(`Respuesta ${response.status} (${contentType || 'sin content-type'})`) },
     );
     if (response.status === 401) onUnauthorized?.();
     throw failure;

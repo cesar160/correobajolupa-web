@@ -16,13 +16,13 @@ TypeScript, servido en producción por nginx con un proxy inverso para `/api`.
 ### Desarrollo (sin contenedores)
 
 ```bash
-cp .env.example .env
 npm ci
 npm run dev
 ```
 
-Abre `http://127.0.0.1:5173`. Vite proxya `/api` a `http://127.0.0.1:3000`, así que necesitas
-la API escuchando ahí (o cambia el `target` en `vite.config.ts`).
+La app no lee variables de entorno en desarrollo. Abre `http://127.0.0.1:5173`: Vite proxya
+`/api` a `http://127.0.0.1:3000`, así que necesitas la API escuchando ahí (o cambia el
+`target` en `vite.config.ts`).
 
 ### Producción (Dockerfile)
 

@@ -194,11 +194,22 @@ export function ReportDetailPage() {
             id: 'hallazgos',
             label: `Hallazgos (${findings.length})`,
             content:
-              findings.length === 0 ? (
+              analyzing ? (
                 <EmptyState>
-                  <p>No hay hallazgos registrados.</p>
+                  <p>Análisis en curso. Los hallazgos aparecerán cuando termine.</p>
                   <p className="hint">
-                    Ninguna regla prueba phishing por sí sola; la ausencia de hallazgos no es una garantía.
+                    Esta vista se actualiza sola; la lista vacía todavía no es un resultado.
+                  </p>
+                </EmptyState>
+              ) : report.status === 'failed' ? (
+                <div className="notice notice-warn">
+                  El análisis no terminó, así que no hay hallazgos disponibles.
+                </div>
+              ) : findings.length === 0 ? (
+                <EmptyState>
+                  <p>No se registraron hallazgos con las reglas actuales.</p>
+                  <p className="hint">
+                    Eso no significa que el correo sea seguro: evalúa el mensaje y su contexto.
                   </p>
                 </EmptyState>
               ) : (

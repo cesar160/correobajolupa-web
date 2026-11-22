@@ -1,0 +1,40 @@
+name: CI
+
+on:
+  push:
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  secretos:
+    name: Escáner de secretos
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      pull-requests: write
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          fetch-depth: 0
+      # Para cuentas personales no hace falta licencia; si el repo pasa a una organización, sí.
+      - uses: gitleaks/gitleaks-action@v2
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+  node:
+    name: Node (tipos y build)
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+      - uses: actions/setup-node@v6
+        with:
+          node-version-file: .nvmrc
+          cache: npm
+      - name: Instalar dependencias
+        run: npm ci
+      - name: Tipos
+        run: npm run typecheck
+      - name: Compilar
+        run: npm run build

@@ -1,24 +1,25 @@
 server {
     listen 80;
     server_name _;
+    server_tokens off;
     root /usr/share/nginx/html;
     index index.html;
-
-    # Cabeceras de defensa en profundidad: el front solo se sirve a sí mismo.
-    add_header X-Content-Type-Options "nosniff" always;
-    add_header Referrer-Policy "no-referrer" always;
-    # 'self' porque la vista de detalle incrusta el HTML saneado de la API en un iframe.
-    add_header X-Frame-Options "SAMEORIGIN" always;
-    add_header Cross-Origin-Resource-Policy "same-origin" always;
-    add_header Cross-Origin-Opener-Policy "same-origin" always;
-    add_header Permissions-Policy "camera=(), geolocation=(), microphone=(), focus-without-user-activation=()" always;
-    add_header Content-Security-Policy "default-src 'self'; base-uri 'self'; object-src 'none'; frame-ancestors 'self'; frame-src 'self'; img-src 'self' data:; style-src 'self' 'unsafe-inline'; script-src 'self'; connect-src 'self'; font-src 'self'; form-action 'self'" always;
 
     # Un .eml puede ser más grande que el límite por defecto de nginx (1 MB).
     client_max_body_size 10m;
 
-    # Rutas de la SPAs: index.html para deep links (/reports/:id).
+    # Rutas de la SPA: index.html para deep links (/reports/:id).
+    # Las cabeceras van AQUÍ, no en server: si estuvieran en server también se
+    # añadirían a /api y el X-Frame-Options: SAMEORIGIN chocaría con el DENY de
+    # la API (dos valores distintos => el navegador aplica DENY y el iframe muere).
     location / {
+        add_header X-Content-Type-Options "nosniff" always;
+        add_header Referrer-Policy "no-referrer" always;
+        add_header X-Frame-Options "SAMEORIGIN" always;
+        add_header Cross-Origin-Resource-Policy "same-origin" always;
+        add_header Cross-Origin-Opener-Policy "same-origin" always;
+        add_header Permissions-Policy "camera=(), geolocation=(), microphone=(), focus-without-user-activation=()" always;
+        add_header Content-Security-Policy "default-src 'self'; base-uri 'self'; object-src 'none'; frame-ancestors 'self'; frame-src 'self'; img-src 'self' data:; style-src 'self' 'unsafe-inline'; script-src 'self'; connect-src 'self'; font-src 'self'; form-action 'self'" always;
         try_files $uri $uri/ /index.html;
     }
 

@@ -10,7 +10,7 @@ COPY . .
 RUN npm run build
 
 # Ejecución: nginx sirve el build y enruta /api/* al servicio de la API.
-FROM nginx:stable-alpine AS runtime
+FROM nginx:1.30.7-alpine3.24 AS runtime
 ENV API_UPSTREAM=api:3000
 COPY docker/default.conf.template /etc/cbl/default.conf.template
 COPY docker/entrypoint.sh /usr/local/bin/cbl-entrypoint.sh
