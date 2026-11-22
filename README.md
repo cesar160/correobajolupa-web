@@ -101,5 +101,4 @@ back suba M1.
 
 ## Repositorio
 
-Remote origin: `https://github.com/AngelChame/correobajolupa-web.git`.
-El repo remoto debe crearse vacío en GitHub antes del primer `git push`.
+Remote origin: `https://github.com/cesar160/correobajolupa-web.git`.
