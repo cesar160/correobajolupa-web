@@ -601,6 +601,20 @@ textarea:is(:user-invalid, .user-invalid-fallback) {
   overflow: hidden;
 }
 
+/* Registradas para que el punto de luz interpule suavemente; sin soporte,
+   el degradado sigue funcionando con los valores de respaldo de var(). */
+@property --sphere-light-x {
+  syntax: '<percentage>';
+  inherits: false;
+  initial-value: 32%;
+}
+
+@property --sphere-light-y {
+  syntax: '<percentage>';
+  inherits: false;
+  initial-value: 28%;
+}
+
 .sphere-area {
   display: grid;
   place-items: center;
@@ -612,16 +626,20 @@ textarea:is(:user-invalid, .user-invalid-fallback) {
   inline-size: 14rem;
   block-size: 14rem;
   border-radius: var(--radius-full);
-  background: radial-gradient(circle at 32% 28%, #ff8a65 0%, var(--color-ember-orange) 24%, var(--color-violet-spark) 62%, #2b0b6b 100%);
+  background: radial-gradient(
+    circle at var(--sphere-light-x, 32%) var(--sphere-light-y, 28%),
+    #ff8a65 0%,
+    var(--color-ember-orange) 24%,
+    var(--color-violet-spark) 62%,
+    #2b0b6b 100%
+  );
   filter: blur(1px);
-  /* Base identidad: evita crear un contexto de apilamiento solo al moverla. */
-  translate: var(--sphere-x, 0px) var(--sphere-y, 0px);
   pointer-events: none;
 }
 
 @media (prefers-reduced-motion: no-preference) {
   .sphere {
-    transition: translate 260ms ease-out;
+    transition: --sphere-light-x 180ms ease-out, --sphere-light-y 180ms ease-out;
   }
 }
 
