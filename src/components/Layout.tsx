@@ -1,8 +1,8 @@
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { NavLink, Outlet, useLocation, useNavigate } from 'react-router-dom';
 import { errorMessage } from '../api/client';
 import { useAuth } from '../auth/AuthContext';
-import { RoleBadge } from './ui';
+import { ErrorBox, RoleBadge } from './ui';
 
 const TITLES: Record<string, string> = {
   '/reports': 'Reportes | CorreoBajoLupa',
@@ -14,6 +14,7 @@ export function Layout() {
   const { user, logout, hasRole } = useAuth();
   const navigate = useNavigate();
   const location = useLocation();
+  const [error, setError] = useState('');
 
   useEffect(() => {
     document.title =
@@ -24,11 +25,12 @@ export function Layout() {
   }, [location.pathname]);
 
   const handleLogout = async () => {
+    setError('');
     try {
       await logout();
       navigate('/login', { replace: true });
-    } catch (error) {
-      window.alert(errorMessage(error));
+    } catch (failure) {
+      setError(errorMessage(failure));
     }
   };
 
@@ -67,6 +69,7 @@ export function Layout() {
       </header>
 
       <main id="contenido-principal" tabIndex={-1} className="main-content">
+        <ErrorBox message={error} />
         <Outlet />
       </main>
 
