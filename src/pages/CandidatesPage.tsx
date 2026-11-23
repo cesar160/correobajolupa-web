@@ -62,7 +62,9 @@ export function CandidatesPage() {
                     {candidate.message.fromAddress ?? 'remitente desconocido'} · {candidate.message.location === 'inbox' ? 'Bandeja de entrada' : 'Cuarentena'}
                   </p>
                 </div>
-                <span className="badge">{candidate.reasons.length} razones</span>
+                <span className="badge">
+                  {candidate.reasons.length} {candidate.reasons.length === 1 ? 'razón' : 'razones'}
+                </span>
               </div>
               <ul className="reason-list">
                 {candidate.reasons.map((reason, index) => (

@@ -743,6 +743,7 @@ a {
   justify-content: flex-end;
   gap: 0.75rem;
   flex-wrap: wrap;
+  margin-block-start: 1.5rem;
 }
 
 /* Indicadores, candidatos y exclusiones */
