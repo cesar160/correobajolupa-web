@@ -2,6 +2,8 @@ import { useCallback, useEffect, useRef, useState, type FormEvent } from 'react'
 import { Link, useParams } from 'react-router-dom';
 import { ApiError, api, errorMessage } from '../api/client';
 import type { IncidentDetail, IncidentStatus } from '../api/types';
+import { ActionsPanel } from '../components/ActionsPanel';
+import { QuarantinePanel } from '../components/QuarantinePanel';
 import { EmptyState, ErrorBox, formatDate, Loading, Notice, PageHeader, StatusBadge, Tabs } from '../components/ui';
 
 const STATUS_LABEL: Record<IncidentStatus, string> = {
@@ -249,6 +251,16 @@ export function IncidentDetailPage() {
                 )}
               </section>
             ),
+          },
+          {
+            id: 'cuarentena',
+            label: 'Cuarentena',
+            content: <QuarantinePanel incidentId={id} indicators={detail.indicators} />,
+          },
+          {
+            id: 'acciones',
+            label: 'Acciones',
+            content: <ActionsPanel incidentId={id} />,
           },
         ]}
       />

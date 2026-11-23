@@ -4,6 +4,7 @@ import { Link, Navigate, Route, Routes, useLocation, type Location } from 'react
 import { ProtectedRoute } from './auth/ProtectedRoute';
 import { Layout } from './components/Layout';
 import { CandidatesPage } from './pages/CandidatesPage';
+import { AuditPage } from './pages/AuditPage';
 import { DashboardPage } from './pages/DashboardPage';
 import { ExclusionsPage } from './pages/ExclusionsPage';
 import { IncidentDetailPage } from './pages/IncidentDetailPage';
@@ -76,6 +77,7 @@ function AnimatedRoutes() {
         <Route path="/messages/:id" element={<MessageDetailPage />} />
         <Route path="/incidents" element={<IncidentsPage />} />
         <Route path="/incidents/:id" element={<IncidentDetailPage />} />
+        <Route path="/audit" element={<AuditPage />} />
         <Route
           path="/users"
           element={

@@ -213,6 +213,51 @@ export interface Candidate {
   reasons: CandidateReason[];
 }
 
+export type QuarantineOutcome = 'quarantined' | 'already_quarantined' | 'uidvalidity_mismatch' | 'not_found' | 'error';
+
+export interface QuarantineResult {
+  messageId: string;
+  outcome: QuarantineOutcome;
+  actionId: string | null;
+  detail: string | null;
+}
+
+export interface QuarantineResponse {
+  incidentId: string;
+  results: QuarantineResult[];
+}
+
+export interface Action {
+  id: string;
+  incidentId: string;
+  messageId: string;
+  type: 'quarantine' | 'restore';
+  status: 'done' | 'failed';
+  originalLocation: { folder: string; uid: number; uidValidity: number };
+  newLocation: { folder: string; uid: number; uidValidity: number } | null;
+  actor: { id: string; displayName: string };
+  createdAt: string;
+}
+
+export interface RestoreResponse {
+  actionId: string;
+  outcome: 'restored' | 'already_restored' | 'uidvalidity_mismatch' | 'not_found' | 'error';
+  restoreActionId: string | null;
+  detail: string | null;
+}
+
+export interface AuditEvent {
+  id: string;
+  at: string;
+  action: string;
+  result: 'success' | 'failure' | 'denied';
+  actor: { id: string; displayName: string } | null;
+  targetType: string | null;
+  targetId: string | null;
+  requestId: string | null;
+  metadata: object;
+}
+
 export type MailboxLabel = 'student' | 'teacher' | 'staff';
 export type SyncStatus = 'ok' | 'error' | 'never';
 export type MessageLocation = 'inbox' | 'quarantine';

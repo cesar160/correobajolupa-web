@@ -9,6 +9,7 @@ import {
   Mail,
   Menu,
   PlusCircle,
+  ScrollText,
   ShieldAlert,
   Users,
 } from 'lucide-react';
@@ -28,6 +29,7 @@ const TITLES: Record<string, string> = {
   '/mailboxes': 'Buzones | CorreoBajoLupa',
   '/messages': 'Mensajes | CorreoBajoLupa',
   '/incidents': 'Incidentes | CorreoBajoLupa',
+  '/audit': 'Auditoría | CorreoBajoLupa',
 };
 
 const ROLE_LABEL = {
@@ -138,6 +140,9 @@ export function Layout() {
               </NavLink>
               <NavLink to="/incidents">
                 <Icon as={ShieldAlert} /> Incidentes
+              </NavLink>
+              <NavLink to="/audit">
+                <Icon as={ScrollText} /> Auditoría
               </NavLink>
               <NavLink to="/exclusions">
                 <Icon as={Ban} /> Exclusiones

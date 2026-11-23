@@ -1,5 +1,7 @@
 import type {
+  Action,
   AttachmentList,
+  AuditEvent,
   Candidate,
   ErrorResponse,
   Exclusion,
@@ -15,6 +17,8 @@ import type {
   MessageLocation,
   MessageSummary,
   Paginated,
+  QuarantineResponse,
+  RestoreResponse,
   SyncResult,
   FindingList,
   LoginBody,
@@ -247,6 +251,20 @@ export const api = {
     request<void>(`/incidents/${segment(id)}/indicators/${segment(indicatorId)}`, { method: 'DELETE' }),
   addComment: (id: string, body: string) =>
     request<Comment>(`/incidents/${segment(id)}/comments`, { method: 'POST', json: { body } }),
+
+  quarantineMessages: (id: string, messageIds: string[]) =>
+    request<QuarantineResponse>(`/incidents/${segment(id)}/quarantine`, {
+      method: 'POST',
+      json: { messageIds, confirm: true },
+    }),
+  listIncidentActions: (id: string) => request<{ items: Action[] }>(`/incidents/${segment(id)}/actions`),
+  restoreAction: (actionId: string) =>
+    request<RestoreResponse>(`/actions/${segment(actionId)}/restore`, {
+      method: 'POST',
+      json: { confirm: true },
+    }),
+  listAudit: (params: { action?: string; actorId?: string; from?: string; to?: string; page?: number; pageSize?: number } = {}) =>
+    request<Paginated<AuditEvent>>(`/audit${query(params)}`),
   getReportText: (id: string) =>
     request<string>(`/reports/${segment(id)}/text`, { accept: 'text/plain' }),
   reportHtmlUrl: (id: string) => `${API_BASE}/reports/${segment(id)}/html`,
