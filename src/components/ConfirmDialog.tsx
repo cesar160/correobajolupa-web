@@ -86,6 +86,9 @@ export function ConfirmDialog({
         void closeAnimated();
       }}
     >
+      <div className="dialog-icon" aria-hidden="true">
+        <Icon as={Trash2} size={20} />
+      </div>
       <h2 id={titleId}>{title}</h2>
       <p>{description}</p>
       <div className="dialog-actions">

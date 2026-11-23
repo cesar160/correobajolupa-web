@@ -13,6 +13,7 @@ import {
   CircleCheck,
   CircleX,
   Clock,
+  Inbox,
   LoaderCircle,
   Minus,
   TriangleAlert,
@@ -45,7 +46,12 @@ export function ErrorBox({ message }: { message: string }) {
 }
 
 export function EmptyState({ children }: { children: ReactNode }) {
-  return <div className="empty-state">{children}</div>;
+  return (
+    <div className="empty-state">
+      <Icon as={Inbox} size={28} />
+      {children}
+    </div>
+  );
 }
 
 export function Loading({ label = 'Cargando…' }: { label?: string }) {
@@ -99,13 +105,28 @@ const STATUS_ICON: Record<ReportStatus, LucideIcon> = {
   failed: CircleX,
 };
 
-export function StatusBadge({ status }: { status: ReportStatus }) {
+export function StatusBadge({
+  status,
+  findingsCount,
+}: {
+  status: ReportStatus;
+  findingsCount?: number;
+}) {
+  const label =
+    status === 'completed' && findingsCount !== undefined
+      ? findingsCount > 0
+        ? 'Con hallazgos'
+        : 'Análisis completo'
+      : status === 'queued' || status === 'processing'
+        ? 'En análisis'
+        : STATUS_LABEL[status];
+
   return (
     <span className={`badge badge-status badge-${status}`}>
       <span className="badge-mark">
         <Icon as={STATUS_ICON[status]} size={13} />
       </span>
-      {STATUS_LABEL[status]}
+      {label}
     </span>
   );
 }

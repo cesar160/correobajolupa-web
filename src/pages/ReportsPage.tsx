@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useState } from 'react';
-import { Filter, Plus, Trash2 } from 'lucide-react';
+import { CircleCheck, Filter, Plus, Trash2 } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { api, errorMessage } from '../api/client';
 import type { ReportStatus, ReportSummary } from '../api/types';
@@ -32,6 +32,7 @@ export function ReportsPage() {
   const [total, setTotal] = useState(0);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
+  const [notice, setNotice] = useState('');
   const [pendingDelete, setPendingDelete] = useState<ReportSummary | null>(null);
   const [deleting, setDeleting] = useState(false);
 
@@ -72,6 +73,7 @@ export function ReportsPage() {
     setError('');
     try {
       await api.deleteReport(pendingDelete.id);
+      setNotice('El reporte se eliminó correctamente.');
       setPendingDelete(null);
       await load(true);
     } catch (failure) {
@@ -87,8 +89,8 @@ export function ReportsPage() {
   return (
     <>
       <PageHeader
-        title="Reportes"
-        description="Correos enviados a análisis. El estado se actualiza solo mientras hay análisis en curso."
+        title="Mis reportes"
+        description="Consulta y organiza los mensajes que has enviado para análisis."
         actions={
           <Link className="btn btn-primary" to="/reports/new">
             <Icon as={Plus} /> Nuevo análisis
@@ -97,6 +99,11 @@ export function ReportsPage() {
       />
 
       <ErrorBox message={error} />
+      {notice && (
+        <p className="notice" role="status">
+          <Icon as={CircleCheck} size={16} /> {notice}
+        </p>
+      )}
 
       <search>
         <form
@@ -176,7 +183,7 @@ export function ReportsPage() {
                   </th>
                   <td>{report.fromAddress ?? '—'}</td>
                   <td>
-                    <StatusBadge status={report.status} />
+                    <StatusBadge status={report.status} findingsCount={report.findingsCount} />
                   </td>
                   <td>
                     <PriorityBadge priority={report.priority} />

@@ -41,10 +41,10 @@ export function LoginPage() {
         <div className="auth-form-inner">
           <p className="eyebrow">Acceso al laboratorio</p>
           <h1 id="login-title" tabIndex={-1}>
-            Iniciar sesión
+            Bienvenida de nuevo
           </h1>
           <p className="page-description">
-            Analiza correos sospechosos con reglas explicables y guía de mitigación.
+            Inicia sesión para revisar tus reportes.
           </p>
 
           <ErrorBox message={error} />
@@ -101,19 +101,29 @@ export function LoginPage() {
             </div>
 
             <button type="submit" className="btn btn-primary" disabled={busy}>
-              <Icon as={LogIn} /> {busy ? 'Entrando…' : 'Entrar'}
+              <Icon as={LogIn} /> {busy ? 'Entrando…' : 'Iniciar sesión'}
             </button>
           </form>
 
           <p className="auth-switch">
-            ¿Aún no tienes cuenta? <Link to="/register">Crear una cuenta</Link>
+            ¿No tienes cuenta? <Link to="/register">Regístrate</Link>
           </p>
         </div>
       </section>
 
-      <aside className="auth-art" aria-hidden="true">
-        <InteractiveSphere />
-        <p className="auth-art-caption">Correo bajo la lupa</p>
+      <aside className="auth-art">
+        <div className="auth-art-inner">
+          <span className="auth-art-brand">CORREOBajoLUPA</span>
+          <div className="auth-art-copy">
+            <h2>La seguridad empieza por observar.</h2>
+            <p>Analiza mensajes sospechosos. Comprende las señales. Actúa con evidencia.</p>
+            <span className="auth-art-badge">Análisis explicable</span>
+            <p className="auth-art-foot">
+              Diseñado para identificar y documentar indicios de phishing sin abrir enlaces peligrosos.
+            </p>
+          </div>
+          <InteractiveSphere />
+        </div>
       </aside>
     </div>
   );

@@ -50,10 +50,10 @@ export function RegisterPage() {
         <div className="auth-form-inner">
           <p className="eyebrow">Crear cuenta</p>
           <h1 id="register-title" tabIndex={-1}>
-            Registro
+            Crea tu cuenta
           </h1>
           <p className="page-description">
-            Tu cuenta empieza con el rol de reportante. Un administrador podrá cambiarla después.
+            Únete para analizar mensajes y dar seguimiento a tus reportes.
           </p>
 
           <ErrorBox message={error} />
@@ -163,12 +163,23 @@ export function RegisterPage() {
           <p className="auth-switch">
             ¿Ya tienes cuenta? <Link to="/login">Iniciar sesión</Link>
           </p>
+          <p className="hint auth-foot">Tu cuenta comienza con el rol de reportante.</p>
         </div>
       </section>
 
-      <aside className="auth-art" aria-hidden="true">
-        <InteractiveSphere />
-        <p className="auth-art-caption">Correo bajo la lupa</p>
+      <aside className="auth-art">
+        <div className="auth-art-inner">
+          <span className="auth-art-brand">CORREOBajoLUPA</span>
+          <div className="auth-art-copy">
+            <h2>La seguridad empieza por observar.</h2>
+            <p>Analiza mensajes sospechosos. Comprende las señales. Actúa con evidencia.</p>
+            <span className="auth-art-badge">Análisis explicable</span>
+            <p className="auth-art-foot">
+              Diseñado para identificar y documentar indicios de phishing sin abrir enlaces peligrosos.
+            </p>
+          </div>
+          <InteractiveSphere />
+        </div>
       </aside>
     </div>
   );

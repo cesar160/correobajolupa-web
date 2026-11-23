@@ -1,5 +1,5 @@
 import { useState, type ChangeEvent, type FormEvent } from 'react';
-import { ClipboardPaste, FileUp } from 'lucide-react';
+import { ClipboardPaste, CircleCheck, FileText, FileUp, UploadCloud } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { api, errorMessage } from '../api/client';
 import { Icon } from '../components/Icon';
@@ -57,8 +57,8 @@ export function NewReportPage() {
   return (
     <>
       <PageHeader
-        title="Nuevo análisis"
-        description="Sube un mensaje .eml o pega su texto. El análisis es asíncrono: verás el estado en el detalle."
+        title="Analizar correo sospechoso"
+        description="Envía un archivo original para revisar señales y obtener evidencias."
       />
 
       <ErrorBox message={error} />
@@ -72,20 +72,35 @@ export function NewReportPage() {
             content: (
               <form className="form-stack" onSubmit={submitFile}>
                 <div className="field">
-                  <label htmlFor="eml-file">Archivo .eml</label>
-                  <span id="eml-file-hint" className="hint">
-                    Se acepta un único mensaje; el análisis no visita ningún enlace del correo.
+                  <span id="eml-file-hint" className="visually-hidden">
+                    Selecciona un archivo .eml para analizarlo.
                   </span>
-                  <input
-                    id="eml-file"
-                    name="file"
-                    type="file"
-                    accept=".eml,message/rfc822"
-                    aria-describedby="eml-file-hint"
-                    required
-                    onChange={handleFileChange}
-                  />
-                  {file && <p className="file-name">Seleccionado: {file.name}</p>}
+                  <label htmlFor="eml-file" className="dropzone">
+                    <Icon as={UploadCloud} size={26} />
+                    <strong>Arrastra tu archivo .eml aquí</strong>
+                    <span>o selecciónalo desde tu equipo</span>
+                    <span className="btn btn-outline btn-small">Explorar archivos</span>
+                    <input
+                      id="eml-file"
+                      name="file"
+                      type="file"
+                      accept=".eml,message/rfc822"
+                      aria-describedby="eml-file-hint"
+                      className="file-input"
+                      required
+                      onChange={handleFileChange}
+                    />
+                  </label>
+                  {file && (
+                    <div className="file-row">
+                      <Icon as={FileText} size={20} />
+                      <span>
+                        <strong>{file.name}</strong>
+                        <span className="file-name"> · archivo listo</span>
+                      </span>
+                      <Icon as={CircleCheck} size={18} />
+                    </div>
+                  )}
                 </div>
                 <button type="submit" className="btn btn-primary" disabled={busy}>
                   <Icon as={FileUp} /> {busy ? 'Enviando…' : 'Analizar archivo'}
@@ -95,11 +110,11 @@ export function NewReportPage() {
           },
           {
             id: 'texto',
-            label: 'Pegar texto',
+            label: 'Pegar mensaje original',
             content: (
               <form className="form-stack" onSubmit={submitText}>
                 <div className="field">
-                  <label htmlFor="paste-text">Mensaje original (encabezados y cuerpo)</label>
+                  <label htmlFor="paste-text">Contenido del mensaje</label>
                   <span id="paste-text-hint" className="hint">
                     Hasta 200 000 caracteres. El contenido se trata como texto hostil y se escapa.
                   </span>

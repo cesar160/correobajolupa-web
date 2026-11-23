@@ -133,7 +133,7 @@ export function ReportDetailPage() {
       <div className="detail-meta">
         <div>
           <span className="meta-label">Estado</span>
-          <StatusBadge status={report.status} />
+          <StatusBadge status={report.status} findingsCount={report.findingsCount} />
         </div>
         <div>
           <span className="meta-label">Prioridad</span>

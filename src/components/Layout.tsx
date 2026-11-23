@@ -4,13 +4,19 @@ import { NavLink, Outlet, useLocation, useNavigate } from 'react-router-dom';
 import { errorMessage } from '../api/client';
 import { useAuth } from '../auth/AuthContext';
 import { Icon } from './Icon';
-import { ErrorBox, RoleBadge } from './ui';
+import { ErrorBox } from './ui';
 
 const TITLES: Record<string, string> = {
-  '/reports': 'Reportes | CorreoBajoLupa',
-  '/reports/new': 'Nuevo análisis | CorreoBajoLupa',
+  '/reports': 'Mis reportes | CorreoBajoLupa',
+  '/reports/new': 'Analizar correo | CorreoBajoLupa',
   '/users': 'Usuarios | CorreoBajoLupa',
 };
+
+const ROLE_LABEL = {
+  reporter: 'Reportante',
+  analyst: 'Analista',
+  admin: 'Administrador',
+} as const;
 
 export function Layout() {
   const { user, logout, hasRole } = useAuth();
@@ -36,54 +42,69 @@ export function Layout() {
     }
   };
 
+  const initials = (user?.displayName ?? '')
+    .split(' ')
+    .map((part) => part[0])
+    .filter(Boolean)
+    .slice(0, 2)
+    .join('')
+    .toUpperCase();
+
   return (
     <div className="app-shell">
       <a href="#contenido-principal" className="skip-link">
         Saltar al contenido principal
       </a>
 
-      <header className="site-header">
-        <div className="header-inner">
+      <aside className="sidebar">
+        <div className="sidebar-brand">
           <NavLink to="/reports" className="brand">
-            Correo<span>BajoLupa</span>
+            CorreoBajoLupa
           </NavLink>
+          <span className="sidebar-eyebrow">ESPACIO DE REPORTANTE</span>
+        </div>
 
-          <nav aria-label="Navegación principal" className="main-nav">
-            <NavLink to="/reports" end>
-              <Icon as={ClipboardList} /> Reportes
+        <nav aria-label="Navegación principal" className="sidebar-nav">
+          <NavLink to="/reports" end>
+            <Icon as={ClipboardList} /> Mis reportes
+          </NavLink>
+          <NavLink to="/reports/new">
+            <Icon as={PlusCircle} /> Analizar correo
+          </NavLink>
+          {hasRole('admin') && (
+            <NavLink to="/users">
+              <Icon as={Users} /> Usuarios
             </NavLink>
-            <NavLink to="/reports/new">
-              <Icon as={PlusCircle} /> Nuevo análisis
-            </NavLink>
-            {hasRole('admin') && (
-              <NavLink to="/users">
-                <Icon as={Users} /> Usuarios
-              </NavLink>
-            )}
-          </nav>
+          )}
+        </nav>
 
+        <div className="sidebar-bottom">
           {user && (
-            <div className="session-area">
-              <div className="session-user">
-                <span className="session-name">{user.displayName}</span>
-                <RoleBadge role={user.role} />
+            <>
+              <div className="user-card">
+                <span className="avatar" aria-hidden="true">{initials}</span>
+                <span className="user-meta">
+                  <span className="user-name">{user.displayName}</span>
+                  <span className="user-role">{ROLE_LABEL[user.role]}</span>
+                </span>
               </div>
-              <button type="button" className="btn btn-outline btn-small" onClick={handleLogout}>
-                <Icon as={LogOut} /> Cerrar sesión
+              <button type="button" className="logout-link" onClick={handleLogout}>
+                <Icon as={LogOut} /> <span>Cerrar sesión</span>
               </button>
-            </div>
+            </>
           )}
         </div>
-      </header>
+      </aside>
 
       <main id="contenido-principal" tabIndex={-1} className="main-content">
+        <div className="content-topbar">
+          <span className="role-badge">
+            {user ? ROLE_LABEL[user.role] : 'Reportante'}
+          </span>
+        </div>
         <ErrorBox message={error} />
         <Outlet />
       </main>
-
-      <footer className="site-footer">
-        <p>CorreoBajoLupa · Análisis explicable de correos sospechosos</p>
-      </footer>
     </div>
   );
 }
