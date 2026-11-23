@@ -7,10 +7,8 @@ Este archivo es solo la verificación **antes** de ejecutar los bloques en el se
 
 - [x] API (`AngelChame/correobajolupa-api`) con M0–M7mergeado (`bf7a378`).
 - [x] Front (`cesar160/correobajolupa-web`) sin cambios pendientes, último commit `c1689e1`.
-- [ ] **Pendiente en la API local**: `compose.yaml` y `README.md` modificados sin commitear
-      (servicio `web` añadido). La guía clona desde GitHub: si el remoto no tiene ese cambio,
-      el perfil `web` no existirá en el servidor y el bloque 8 fallará.
-      -> Confirmar con el dueño del repo API antes de desplegar.
+- [x] Verificado: `origin/main` de la API (`bf7a378`) ya contiene el servicio `web`
+      (`profiles: [web]`) y `lab-seed` (`profiles: [tools]`). No hay cambios pendientes.
 
 ## 2. Estructura de carpetas en el servidor
 
