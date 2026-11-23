@@ -1,5 +1,12 @@
-import { useEffect, useState } from 'react';
-import { ClipboardList, LayoutDashboard, LogOut, PlusCircle, Users } from 'lucide-react';
+import { useEffect, useRef, useState } from 'react';
+import {
+  ClipboardList,
+  LayoutDashboard,
+  LogOut,
+  Menu,
+  PlusCircle,
+  Users,
+} from 'lucide-react';
 import { NavLink, Outlet, useLocation, useNavigate } from 'react-router-dom';
 import { errorMessage } from '../api/client';
 import { useAuth } from '../auth/AuthContext';
@@ -24,6 +31,8 @@ export function Layout() {
   const navigate = useNavigate();
   const location = useLocation();
   const [error, setError] = useState('');
+  const [menuOpen, setMenuOpen] = useState(false);
+  const navRef = useRef<HTMLElement>(null);
 
   useEffect(() => {
     document.title =
@@ -32,6 +41,16 @@ export function Layout() {
         ? 'Detalle del reporte | CorreoBajoLupa'
         : 'CorreoBajoLupa');
   }, [location.pathname]);
+
+  useEffect(() => {
+    const nav = navRef.current;
+    if (!nav) return;
+    const sync = (event: Event) => {
+      setMenuOpen((event as Event & { newState: string }).newState === 'open');
+    };
+    nav.addEventListener('toggle', sync);
+    return () => nav.removeEventListener('toggle', sync);
+  }, []);
 
   const handleLogout = async () => {
     setError('');
@@ -51,6 +70,8 @@ export function Layout() {
     .join('')
     .toUpperCase();
 
+  const closeMenu = () => navRef.current?.hidePopover();
+
   return (
     <div className="app-shell">
       <a href="#contenido-principal" className="skip-link">
@@ -59,13 +80,32 @@ export function Layout() {
 
       <aside className="sidebar">
         <div className="sidebar-brand">
-          <NavLink to="/reports" className="brand">
+          <NavLink to="/panel" className="brand">
             CorreoBajoLupa
           </NavLink>
           <span className="sidebar-eyebrow">ESPACIO DE REPORTANTE</span>
         </div>
 
-        <nav aria-label="Navegación principal" className="sidebar-nav">
+        <button
+          type="button"
+          className="menu-button"
+          popoverTarget="sidebar-nav"
+          aria-controls="sidebar-nav"
+          aria-expanded={menuOpen}
+        >
+          <Icon as={Menu} /> Menú
+        </button>
+
+        <nav
+          ref={navRef}
+          id="sidebar-nav"
+          aria-label="Navegación principal"
+          className="sidebar-nav"
+          popover="auto"
+          onClick={(event) => {
+            if ((event.target as HTMLElement).closest('a')) closeMenu();
+          }}
+        >
           <NavLink to="/panel" end>
             <Icon as={LayoutDashboard} /> Panel principal
           </NavLink>
