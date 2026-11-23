@@ -1,6 +1,12 @@
 import type {
   AttachmentList,
+  Candidate,
   ErrorResponse,
+  Exclusion,
+  Indicator,
+  IndicatorStatus,
+  IndicatorType,
+  Paginated,
   FindingList,
   LoginBody,
   RegisterBody,
@@ -185,6 +191,23 @@ export const api = {
     request<AttachmentList>(`/reports/${segment(id)}/attachments`),
   getReportDocument: (id: string) =>
     request<ReportDocument>(`/reports/${segment(id)}/report`),
+
+  listIndicators: (params: { status?: IndicatorStatus | ''; type?: IndicatorType | ''; page?: number; pageSize?: number } = {}) =>
+    request<Paginated<Indicator>>(`/indicators${query(params)}`),
+  createIndicator: (body: { type: IndicatorType; value: string; reportId?: string; note?: string }) =>
+    request<Indicator>('/indicators', { method: 'POST', json: body }),
+  confirmIndicator: (id: string) =>
+    request<Indicator>(`/indicators/${segment(id)}/confirm`, { method: 'POST' }),
+  dismissIndicator: (id: string) =>
+    request<Indicator>(`/indicators/${segment(id)}/dismiss`, { method: 'POST' }),
+  listCandidates: (id: string, params: { page?: number; pageSize?: number } = {}) =>
+    request<Paginated<Candidate>>(`/indicators/${segment(id)}/candidates${query(params)}`),
+
+  listExclusions: () => request<{ items: Exclusion[] }>('/exclusions'),
+  createExclusion: (body: { domain: string; reason?: string }) =>
+    request<Exclusion>('/exclusions', { method: 'POST', json: body }),
+  deleteExclusion: (id: string) =>
+    request<void>(`/exclusions/${segment(id)}`, { method: 'DELETE' }),
   getReportText: (id: string) =>
     request<string>(`/reports/${segment(id)}/text`, { accept: 'text/plain' }),
   reportHtmlUrl: (id: string) => `${API_BASE}/reports/${segment(id)}/html`,

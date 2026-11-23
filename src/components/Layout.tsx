@@ -1,6 +1,8 @@
 import { useEffect, useRef, useState } from 'react';
 import {
+  Ban,
   ClipboardList,
+  Fingerprint,
   LayoutDashboard,
   LogOut,
   Menu,
@@ -18,6 +20,8 @@ const TITLES: Record<string, string> = {
   '/reports': 'Mis reportes | CorreoBajoLupa',
   '/reports/new': 'Analizar correo | CorreoBajoLupa',
   '/users': 'Usuarios | CorreoBajoLupa',
+  '/indicators': 'Indicadores | CorreoBajoLupa',
+  '/exclusions': 'Exclusiones | CorreoBajoLupa',
 };
 
 const ROLE_LABEL = {
@@ -115,6 +119,14 @@ export function Layout() {
           <NavLink to="/reports" end>
             <Icon as={ClipboardList} /> Mis reportes
           </NavLink>
+          <NavLink to="/indicators">
+            <Icon as={Fingerprint} /> Indicadores
+          </NavLink>
+          {hasRole('analyst', 'admin') && (
+            <NavLink to="/exclusions">
+              <Icon as={Ban} /> Exclusiones
+            </NavLink>
+          )}
           {hasRole('admin') && (
             <NavLink to="/users">
               <Icon as={Users} /> Usuarios

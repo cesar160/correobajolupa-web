@@ -745,6 +745,93 @@ a {
   flex-wrap: wrap;
 }
 
+/* Indicadores, candidatos y exclusiones */
+
+.indicators-table,
+.exclusions-table {
+  --label-2: 'Estado';
+  --label-3: 'Propuesto por';
+  --label-4: 'Fecha';
+  --label-5: 'Acción';
+}
+
+.exclusions-table {
+  --label-2: 'Origen';
+  --label-3: 'Motivo';
+  --label-4: 'Acción';
+}
+
+.badge-indicator-confirmed,
+.badge-source-manual {
+  background: var(--color-accent);
+  color: #fff;
+}
+
+.badge-indicator-proposed,
+.badge-indicator-dismissed,
+.badge-source-config {
+  background: var(--color-canvas);
+  color: var(--color-slate);
+}
+
+.candidate-list {
+  display: grid;
+  gap: 1rem;
+}
+
+.candidate-card {
+  padding: 1.5rem;
+  display: grid;
+  gap: 1rem;
+}
+
+.candidate-head {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+
+.reason-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  gap: 0.5rem;
+}
+
+.reason-list li {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  flex-wrap: wrap;
+  padding: 0.75rem 1rem;
+  border-radius: 16px;
+  background: var(--color-frost);
+  overflow-wrap: anywhere;
+}
+
+.exclusion-form {
+  padding: 1.5rem;
+  margin-block-end: 1rem;
+}
+
+.exclusion-fields {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr)) auto;
+  align-items: end;
+  gap: 1rem;
+  margin-block-start: 1rem;
+}
+
+@media (max-width: 52rem) {
+  .exclusion-fields {
+    grid-template-columns: 1fr;
+  }
+}
+
 .center-state {
   min-block-size: 60vh;
   display: grid;

@@ -3,7 +3,10 @@ import { flushSync } from 'react-dom';
 import { Link, Navigate, Route, Routes, useLocation, type Location } from 'react-router-dom';
 import { ProtectedRoute } from './auth/ProtectedRoute';
 import { Layout } from './components/Layout';
+import { CandidatesPage } from './pages/CandidatesPage';
 import { DashboardPage } from './pages/DashboardPage';
+import { ExclusionsPage } from './pages/ExclusionsPage';
+import { IndicatorsPage } from './pages/IndicatorsPage';
 import { LoginPage } from './pages/LoginPage';
 import { NewReportPage } from './pages/NewReportPage';
 import { RegisterPage } from './pages/RegisterPage';
@@ -60,6 +63,9 @@ function AnimatedRoutes() {
         <Route path="/reports/new" element={<NewReportPage />} />
         <Route path="/reports/:id/informe" element={<ReportDocumentPage />} />
         <Route path="/reports/:id" element={<ReportDetailPage />} />
+        <Route path="/indicators" element={<IndicatorsPage />} />
+        <Route path="/indicators/:id/candidates" element={<CandidatesPage />} />
+        <Route path="/exclusions" element={<ExclusionsPage />} />
         <Route
           path="/users"
           element={

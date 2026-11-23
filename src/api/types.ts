@@ -3,6 +3,13 @@
 
 export type Role = 'reporter' | 'analyst' | 'admin';
 
+export interface Paginated<T> {
+  items: T[];
+  page: number;
+  pageSize: number;
+  total: number;
+}
+
 export type ErrorCode =
   | 'validation_error'
   | 'unauthenticated'
@@ -164,6 +171,54 @@ export interface GuideFinding {
   whatToDo: string[];
   forAnalyst: string[];
   evidence: EvidenceItem[];
+}
+
+export type IndicatorStatus = 'proposed' | 'confirmed' | 'dismissed';
+
+export interface Indicator {
+  id: string;
+  type: IndicatorType;
+  displayValue: string;
+  status: IndicatorStatus;
+  reportId: string | null;
+  proposedBy: { id: string; displayName: string };
+  decidedBy: { id: string; displayName: string } | null;
+  createdAt: string;
+  decidedAt: string | null;
+}
+
+export interface MessageSummary {
+  id: string;
+  mailboxId: string;
+  location: 'inbox' | 'quarantine';
+  uid: number;
+  uidValidity: number;
+  subject: string | null;
+  fromAddress: string | null;
+  date: string | null;
+  hasAttachments: boolean;
+  linksCount: number;
+  quarantined: boolean;
+}
+
+export interface CandidateReason {
+  indicatorId: string;
+  kind: IndicatorType;
+  location: 'link' | 'from' | 'reply_to' | 'attachment';
+  matchedValue: string;
+}
+
+export interface Candidate {
+  message: MessageSummary;
+  reasons: CandidateReason[];
+}
+
+export interface Exclusion {
+  id: string | null;
+  domain: string;
+  source: 'config' | 'manual';
+  reason: string | null;
+  createdAt: string | null;
 }
 
 export interface ReportDocument {
