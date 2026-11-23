@@ -169,7 +169,7 @@ export function RegisterPage() {
 
       <aside className="auth-art">
         <div className="auth-art-inner">
-          <span className="auth-art-brand">CORREOBajoLUPA</span>
+          <span className="auth-art-brand">CorreoBajoLupa</span>
           <div className="auth-art-copy">
             <h2>La seguridad empieza por observar.</h2>
             <p>Analiza mensajes sospechosos. Comprende las señales. Actúa con evidencia.</p>
