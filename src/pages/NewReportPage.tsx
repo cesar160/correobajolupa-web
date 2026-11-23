@@ -1,5 +1,12 @@
 import { useState, type ChangeEvent, type FormEvent } from 'react';
-import { ClipboardPaste, CircleCheck, FileText, FileUp, UploadCloud } from 'lucide-react';
+import {
+  CircleCheck,
+  ClipboardPaste,
+  FileText,
+  FileUp,
+  ShieldCheck,
+  UploadCloud,
+} from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { api, errorMessage } from '../api/client';
 import { Icon } from '../components/Icon';
@@ -63,85 +70,133 @@ export function NewReportPage() {
 
       <ErrorBox message={error} />
 
-      <Tabs
-        label="Formas de enviar un correo"
-        items={[
-          {
-            id: 'archivo',
-            label: 'Subir archivo .eml',
-            content: (
-              <form className="form-stack" onSubmit={submitFile}>
-                <div className="field">
-                  <span id="eml-file-hint" className="visually-hidden">
-                    Selecciona un archivo .eml para analizarlo.
-                  </span>
-                  <label htmlFor="eml-file" className="dropzone">
-                    <Icon as={UploadCloud} size={26} />
-                    <strong>Arrastra tu archivo .eml aquí</strong>
-                    <span>o selecciónalo desde tu equipo</span>
-                    <span className="btn btn-outline btn-small">Explorar archivos</span>
-                    <input
-                      id="eml-file"
-                      name="file"
-                      type="file"
-                      accept=".eml,message/rfc822"
-                      aria-describedby="eml-file-hint"
-                      className="file-input"
-                      required
-                      onChange={handleFileChange}
-                    />
-                  </label>
-                  {file && (
-                    <div className="file-row">
-                      <Icon as={FileText} size={20} />
-                      <span>
-                        <strong>{file.name}</strong>
-                        <span className="file-name"> · archivo listo</span>
-                      </span>
-                      <Icon as={CircleCheck} size={18} />
-                    </div>
-                  )}
-                </div>
-                <button type="submit" className="btn btn-primary" disabled={busy}>
-                  <Icon as={FileUp} /> {busy ? 'Enviando…' : 'Analizar archivo'}
-                </button>
-              </form>
-            ),
-          },
-          {
-            id: 'texto',
-            label: 'Pegar mensaje original',
-            content: (
-              <form className="form-stack" onSubmit={submitText}>
-                <div className="field">
-                  <label htmlFor="paste-text">Contenido del mensaje</label>
-                  <span id="paste-text-hint" className="hint">
-                    Hasta 200 000 caracteres. El contenido se trata como texto hostil y se escapa.
-                  </span>
-                  <textarea
-                    id="paste-text"
-                    name="text"
-                    rows={14}
-                    maxLength={200000}
-                    aria-describedby="paste-text-hint"
-                    required
-                    value={text}
-                    onChange={(event) => setText(event.target.value)}
-                  />
-                </div>
-                <button type="submit" className="btn btn-primary" disabled={busy}>
-                  <Icon as={ClipboardPaste} /> {busy ? 'Enviando…' : 'Analizar texto'}
-                </button>
-              </form>
-            ),
-          },
-        ]}
-      />
+      <div className="analyze-stepbar">
+        <Tabs
+          label="Formas de enviar un correo"
+          items={[
+            {
+              id: 'archivo',
+              label: 'Subir archivo .eml',
+              content: (
+                <form className="analyze-stack" onSubmit={submitFile}>
+                  <section className="card analyze-card">
+                    <h2>Archivo original del correo</h2>
+                    <p className="hint">
+                      Importa un mensaje .eml exportado desde tu proveedor. El contenido no se ejecuta.
+                    </p>
 
-      <p className="security-note">
-        Los enlaces se muestran desactivados (por ejemplo <code>hxxp://dominio[.]com</code>) y
-        nunca se visitan. El HTML del correo se sanea en la API y se incrusta sin permisos.
-      </p>
+                    <label htmlFor="eml-file" className="dropzone">
+                      <Icon as={UploadCloud} size={28} />
+                      <strong>Arrastra tu archivo .eml aquí</strong>
+                      <span>o selecciónalo desde tu equipo</span>
+                      <span className="btn btn-outline btn-small">Explorar archivos</span>
+                      <input
+                        id="eml-file"
+                        name="file"
+                        type="file"
+                        accept=".eml,message/rfc822"
+                        className="file-input"
+                        required
+                        onChange={handleFileChange}
+                      />
+                    </label>
+
+                    <p className="dropzone-help">
+                      Formato admitido: .eml · Evita incluir datos personales innecesarios
+                    </p>
+
+                    {file && (
+                      <div className="file-row">
+                        <Icon as={FileText} size={20} />
+                        <span>
+                          <strong>{file.name}</strong>
+                          <span className="file-name"> · archivo listo</span>
+                        </span>
+                        <Icon as={CircleCheck} size={18} />
+                      </div>
+                    )}
+                  </section>
+
+                  <section className="card protected-card">
+                    <Icon as={ShieldCheck} size={22} />
+                    <div>
+                      <h3>Análisis protegido</h3>
+                      <p className="hint">
+                        No se visitan enlaces ni se ejecutan adjuntos. Los reportes se conservan
+                        durante un periodo limitado.
+                      </p>
+                    </div>
+                  </section>
+
+                  <div className="analyze-actions">
+                    {file && (
+                      <button type="button" className="btn btn-outline" onClick={() => setFile(null)}>
+                        Quitar archivo
+                      </button>
+                    )}
+                    <button type="submit" className="btn btn-primary" disabled={busy}>
+                      <Icon as={FileUp} /> {busy ? 'Analizando…' : 'Analizar correo ↗'}
+                    </button>
+                  </div>
+                </form>
+              ),
+            },
+            {
+              id: 'texto',
+              label: 'Pegar mensaje original',
+              content: (
+                <form className="analyze-stack" onSubmit={submitText}>
+                  <section className="card analyze-card">
+                    <h2>Contenido del mensaje</h2>
+                    <p className="hint">
+                      Incluye remitente, destinatario, asunto y encabezados originales cuando sea posible.
+                    </p>
+                    <textarea
+                      id="paste-text"
+                      name="text"
+                      rows={14}
+                      maxLength={200000}
+                      aria-label="Contenido del mensaje"
+                      required
+                      value={text}
+                      onChange={(event) => setText(event.target.value)}
+                    />
+                    <p className="dropzone-help">
+                      El enlace se muestra como texto no interactivo.
+                    </p>
+                  </section>
+
+                  <section className="card protected-card">
+                    <Icon as={ClipboardPaste} size={22} />
+                    <div>
+                      <h3>Antes de analizar</h3>
+                      <p className="hint">
+                        Pega el texto original sin editar los encabezados. Esta opción puede aportar
+                        menos evidencias que un archivo .eml.
+                      </p>
+                    </div>
+                  </section>
+
+                  <div className="analyze-actions">
+                    <button
+                      type="button"
+                      className="btn btn-outline"
+                      onClick={() => setText('')}
+                      disabled={!text}
+                    >
+                      Limpiar contenido
+                    </button>
+                    <button type="submit" className="btn btn-primary" disabled={busy}>
+                      <Icon as={ClipboardPaste} /> {busy ? 'Analizando…' : 'Analizar mensaje ↗'}
+                    </button>
+                  </div>
+                </form>
+              ),
+            },
+          ]}
+        />
+        <span className="step-meta">01 / 02 · Entrada de correo</span>
+      </div>
     </>
   );
 }
