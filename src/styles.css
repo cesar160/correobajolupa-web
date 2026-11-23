@@ -1189,6 +1189,20 @@ tbody th small,
   --label-3: 'Dominio';
 }
 
+.attachments-table {
+  --label-2: 'Tipos';
+  --label-3: 'Tamaño';
+  --label-4: 'Escaneo';
+}
+
+.attachments-card {
+  padding: 1.5rem;
+}
+
+.attachments-card > .hint {
+  margin-block: 0.5rem 1rem;
+}
+
 .checkbox-inline {
   display: inline-flex;
   align-items: center;
@@ -1253,6 +1267,23 @@ tbody th small,
 .badge-unknown {
   background: var(--color-canvas);
   color: var(--color-slate);
+}
+
+.badge-scan-detected {
+  background: var(--color-accent);
+  color: #fff;
+}
+
+.badge-scan-not_detected {
+  background: var(--color-canvas);
+  color: var(--color-ink);
+}
+
+.badge-scan-unsupported,
+.badge-scan-error {
+  background: var(--color-canvas);
+  color: var(--color-slate);
+  border: 1px solid var(--color-accent);
 }
 
 .badge-mark {

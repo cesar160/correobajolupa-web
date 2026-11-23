@@ -2,7 +2,7 @@ import { useCallback, useEffect, useState } from 'react';
 import { Trash2 } from 'lucide-react';
 import { Link, useNavigate, useParams } from 'react-router-dom';
 import { ApiError, api, errorMessage } from '../api/client';
-import type { Finding, ReportDetail } from '../api/types';
+import type { Attachment, Finding, ReportDetail } from '../api/types';
 import { ConfirmDialog } from '../components/ConfirmDialog';
 import { Icon } from '../components/Icon';
 import {
@@ -13,9 +13,13 @@ import {
   Loading,
   PageHeader,
   PriorityBadge,
+  ScanBadge,
   StatusBadge,
   Tabs,
 } from '../components/ui';
+
+const formatBytes = (bytes: number) =>
+  bytes < 1024 ? `${bytes} B` : `${(bytes / 1024).toFixed(0)} KB`;
 
 const LIMITED_TEXT = {
   missing_headers: 'Faltaban encabezados completos; el análisis es limitado, no “sin señales”.',
@@ -28,6 +32,8 @@ export function ReportDetailPage() {
 
   const [report, setReport] = useState<ReportDetail | null>(null);
   const [findings, setFindings] = useState<Finding[]>([]);
+  const [attachments, setAttachments] = useState<Attachment[]>([]);
+  const [attachmentsError, setAttachmentsError] = useState('');
   const [text, setText] = useState<string | null>(null);
   const [textError, setTextError] = useState('');
   const [notFound, setNotFound] = useState(false);
@@ -54,6 +60,23 @@ export function ReportDetailPage() {
         setReport(detail);
         setFindings(found.items);
         setNotFound(false);
+        if (detail.status === 'queued' || detail.status === 'processing') {
+          setAttachments([]);
+          setAttachmentsError('El análisis aún no terminó; los adjuntos estarán disponibles al finalizar.');
+        } else {
+          try {
+            const data = await api.listAttachments(id);
+            setAttachments(data.items);
+            setAttachmentsError('');
+          } catch (failure) {
+            setAttachments([]);
+            setAttachmentsError(
+              failure instanceof ApiError && failure.code === 'report_not_ready'
+                ? 'El análisis aún no terminó; los adjuntos estarán disponibles al finalizar.'
+                : errorMessage(failure),
+            );
+          }
+        }
         if (detail.status !== 'queued' && detail.status !== 'processing') void loadText();
       } catch (failure) {
         if (failure instanceof ApiError && failure.code === 'not_found') setNotFound(true);
@@ -270,6 +293,63 @@ export function ReportDetailPage() {
                   </div>
                 </>
               ),
+          },
+          {
+            id: 'adjuntos',
+            label: `Adjuntos (${attachments.length})`,
+            content: attachmentsError ? (
+              <p className="notice notice-warn">{attachmentsError}</p>
+            ) : attachments.length === 0 ? (
+              <EmptyState>
+                <p>Este correo no trae adjuntos</p>
+                <p>Los archivos del mensaje aparecerán aquí cuando el análisis haya terminado.</p>
+              </EmptyState>
+            ) : (
+              <section className="card attachments-card">
+                <h2>Archivos del mensaje</h2>
+                <p className="hint">
+                  El contenido nunca se descarga al navegador: solo se muestran sus datos y el
+                  resultado del análisis.
+                </p>
+                <div className="table-wrapper" role="region" aria-labelledby="attachments-caption" tabIndex={0}>
+                  <table className="reports-table attachments-table">
+                    <caption id="attachments-caption" className="visually-hidden">Adjuntos del correo</caption>
+                    <thead>
+                      <tr>
+                        <th scope="col">Archivo</th>
+                        <th scope="col">Tipos</th>
+                        <th scope="col">Tamaño</th>
+                        <th scope="col">Escaneo</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {attachments.map((attachment) => (
+                        <tr key={attachment.id}>
+                          <th scope="row">
+                            {attachment.fileName ?? '(sin nombre)'}
+                            <span className="cell-sub mono">{attachment.sha256}</span>
+                          </th>
+                          <td>
+                            {attachment.declaredType ?? '—'}
+                            <span className="cell-sub">
+                              {attachment.detectedType
+                                ? `Detectado: ${attachment.detectedType}`
+                                : 'Sin tipo detectado'}
+                            </span>
+                          </td>
+                          <td>{formatBytes(attachment.sizeBytes)}</td>
+                          <td>
+                            <ScanBadge status={attachment.scanStatus} />
+                            {attachment.scanDetail && <span className="cell-sub">{attachment.scanDetail}</span>}
+                            {attachment.scannedAt && <span className="cell-sub">{formatDate(attachment.scannedAt)}</span>}
+                          </td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                </div>
+              </section>
+            ),
           },
           {
             id: 'texto',

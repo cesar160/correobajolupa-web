@@ -1,4 +1,5 @@
 import type {
+  AttachmentList,
   ErrorResponse,
   FindingList,
   LoginBody,
@@ -176,6 +177,8 @@ export const api = {
     request<void>(`/reports/${segment(id)}`, { method: 'DELETE' }),
   listFindings: (id: string) =>
     request<FindingList>(`/reports/${segment(id)}/findings`),
+  listAttachments: (id: string) =>
+    request<AttachmentList>(`/reports/${segment(id)}/attachments`),
   getReportText: (id: string) =>
     request<string>(`/reports/${segment(id)}/text`, { accept: 'text/plain' }),
   reportHtmlUrl: (id: string) => `${API_BASE}/reports/${segment(id)}/html`,

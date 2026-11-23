@@ -134,6 +134,24 @@ export interface FindingList {
   items: Finding[];
 }
 
+export type ScanStatus = 'not_detected' | 'detected' | 'unsupported' | 'error';
+
+export interface Attachment {
+  id: string;
+  fileName: string | null;
+  declaredType: string | null;
+  detectedType: string | null;
+  sizeBytes: number;
+  sha256: string;
+  scanStatus: ScanStatus;
+  scanDetail: string | null;
+  scannedAt: string | null;
+}
+
+export interface AttachmentList {
+  items: Attachment[];
+}
+
 export interface PasteBody {
   text: string;
 }

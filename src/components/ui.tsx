@@ -19,7 +19,7 @@ import {
   TriangleAlert,
   X,
 } from 'lucide-react';
-import type { AuthResult, Priority, ReportStatus, Role } from '../api/types';
+import type { AuthResult, Priority, ReportStatus, Role, ScanStatus } from '../api/types';
 import type { LucideIcon } from 'lucide-react';
 import { Icon } from './Icon';
 
@@ -179,6 +179,29 @@ const AUTH_LABEL: Record<AuthResult, string> = {
   none: 'none',
   unknown: 'unknown',
 };
+
+const SCAN_LABEL: Record<ScanStatus, string> = {
+  not_detected: 'Sin detectar',
+  detected: 'Detectado',
+  unsupported: 'No compatible',
+  error: 'Error en análisis',
+};
+
+const SCAN_ICON: Record<ScanStatus, LucideIcon> = {
+  not_detected: CircleCheck,
+  detected: TriangleAlert,
+  unsupported: Minus,
+  error: CircleX,
+};
+
+export function ScanBadge({ status }: { status: ScanStatus }) {
+  return (
+    <span className={`badge badge-scan badge-scan-${status}`}>
+      <span className="badge-mark"><Icon as={SCAN_ICON[status]} size={13} /></span>
+      {SCAN_LABEL[status]}
+    </span>
+  );
+}
 
 const AUTH_ICON: Record<AuthResult, LucideIcon> = {
   pass: Check,
