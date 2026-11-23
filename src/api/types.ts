@@ -1,341 +1,76 @@
-// Espejo de contract/openapi.json v0.2.0 (repo correobajolupa-api).
-// Rutas, campos y valores en inglés; textos para personas en español.
+// Tipos generados desde contract/openapi.json v0.3.0 (repo correobajolupa-api).
+// Regenerar con:
+//   npx openapi-typescript ../correobajolupa-api/contract/openapi.json -o src/api/schema.d.ts
+// Los alias de abajo mantienen los nombres que ya usa el front.
 
-export type Role = 'reporter' | 'analyst' | 'admin';
+import type { components } from './schema';
+
+type Schemas = components['schemas'];
+
+export type Role = Schemas['Role'];
+export type ErrorCode = Schemas['ErrorCode'];
+export type ErrorDetail = Schemas['ErrorResponse']['details'] extends Array<infer T> | undefined ? T : never;
+export type ErrorResponse = Schemas['ErrorResponse'];
+export type User = Schemas['User'];
+export type Session = Schemas['Session'];
+export type RegisterBody = Schemas['RegisterBody'];
+export type LoginBody = Schemas['LoginBody'];
+export type UpdateUserBody = Schemas['UpdateUserBody'];
+export type UserList = Schemas['UserList'];
+export type ReportStatus = Schemas['ReportStatus'];
+export type ReportSource = Schemas['ReportSource'];
+export type Priority = Schemas['Priority'];
+export type LimitedReason = Schemas['LimitedReason'];
+export type AuthResult = 'pass' | 'fail' | 'none' | 'unknown';
+export type ReportLink = Schemas['ReportLink'];
+export type ReportSummary = Schemas['ReportSummary'];
+export type ReportList = Schemas['ReportList'];
+export type Authentication = NonNullable<Schemas['ReportDetail']['authentication']>;
+export type ReportDetail = Schemas['ReportDetail'];
+export type RuleId = Schemas['RuleId'];
+export type EvidenceItem = Schemas['EvidenceItem'];
+export type Finding = Schemas['Finding'];
+export type FindingList = Schemas['FindingList'];
+export type PasteBody = Schemas['PasteBody'];
+
+export type ScanStatus = Schemas['ScanStatus'];
+export type Attachment = Schemas['Attachment'];
+export type AttachmentList = Schemas['AttachmentList'];
+
+export type IndicatorType = Schemas['IndicatorType'];
+export type NoteKind = 'limited' | 'no_findings' | 'failed' | 'auth_informative';
+export type GuideFinding = Schemas['GuideFinding'];
+export type ReportDocument = Schemas['ReportDocument'];
+
+export type IndicatorStatus = Schemas['IndicatorStatus'];
+export type Indicator = Schemas['Indicator'];
+export type MessageSummary = Schemas['MessageSummary'];
+export type MessageDetail = Schemas['MessageDetail'];
+export type CandidateReason = Schemas['Candidate']['reasons'][number];
+export type Candidate = Schemas['Candidate'];
+export type Exclusion = Schemas['Exclusion'];
+
+export type MailboxLabel = Schemas['Mailbox']['label'];
+export type SyncStatus = Schemas['Mailbox']['lastSyncStatus'];
+export type MessageLocation = Schemas['MessageSummary']['location'];
+export type Mailbox = Schemas['Mailbox'];
+export type SyncResult = Schemas['SyncResult'];
+
+export type IncidentStatus = Schemas['IncidentStatus'];
+export type Comment = Schemas['Comment'];
+export type IncidentSummary = Schemas['IncidentSummary'];
+export type IncidentDetail = Schemas['IncidentDetail'];
+
+export type QuarantineOutcome = Schemas['QuarantineResponse']['results'][number]['outcome'];
+export type QuarantineResult = Schemas['QuarantineResponse']['results'][number];
+export type QuarantineResponse = Schemas['QuarantineResponse'];
+export type Action = Schemas['Action'];
+export type RestoreResponse = Schemas['RestoreResponse'];
+export type AuditEvent = Schemas['AuditEvent'];
 
 export interface Paginated<T> {
   items: T[];
   page: number;
   pageSize: number;
   total: number;
-}
-
-export type ErrorCode =
-  | 'validation_error'
-  | 'unauthenticated'
-  | 'invalid_credentials'
-  | 'forbidden'
-  | 'not_found'
-  | 'email_taken'
-  | 'conflict'
-  | 'report_not_ready'
-  | 'payload_too_large'
-  | 'unsupported_media_type'
-  | 'rate_limited'
-  | 'internal_error';
-
-export interface ErrorDetail {
-  field: string;
-  message: string;
-}
-
-export interface ErrorResponse {
-  code: ErrorCode;
-  message: string;
-  details?: ErrorDetail[];
-  requestId: string;
-}
-
-export interface User {
-  id: string;
-  email: string;
-  displayName: string;
-  role: Role;
-  active: boolean;
-  createdAt: string;
-}
-
-export interface Session {
-  user: User;
-  csrfToken: string;
-}
-
-export interface RegisterBody {
-  email: string;
-  password: string;
-  displayName: string;
-  inviteCode?: string;
-}
-
-export interface LoginBody {
-  email: string;
-  password: string;
-}
-
-export interface UpdateUserBody {
-  role?: Role;
-  active?: boolean;
-}
-
-export interface UserList {
-  items: User[];
-  page: number;
-  pageSize: number;
-  total: number;
-}
-
-export type ReportStatus = 'queued' | 'processing' | 'completed' | 'limited' | 'failed';
-export type ReportSource = 'eml' | 'paste';
-export type Priority = 'low' | 'medium' | 'high';
-export type LimitedReason = 'missing_headers' | 'parse_error';
-export type AuthResult = 'pass' | 'fail' | 'none' | 'unknown';
-
-export interface ReportLink {
-  displayText: string | null;
-  defangedUrl: string;
-  domain: string | null;
-}
-
-export interface ReportSummary {
-  id: string;
-  status: ReportStatus;
-  source: ReportSource;
-  subject: string | null;
-  fromAddress: string | null;
-  priority: Priority | null;
-  findingsCount: number;
-  createdAt: string;
-  expiresAt: string;
-}
-
-export interface ReportList {
-  items: ReportSummary[];
-  page: number;
-  pageSize: number;
-  total: number;
-}
-
-export interface Authentication {
-  spf: AuthResult;
-  dkim: AuthResult;
-  dmarc: AuthResult;
-}
-
-export interface ReportDetail extends ReportSummary {
-  limitedReason: LimitedReason | null;
-  rulesVersion: string | null;
-  analyzedAt: string | null;
-  links: ReportLink[];
-  hasHtml: boolean;
-  authentication: Authentication | null;
-}
-
-export type RuleId = 'R1' | 'R2' | 'R3' | 'R4' | 'R5' | 'R6' | 'R7' | 'R8';
-
-export interface EvidenceItem {
-  label: string;
-  value: string;
-}
-
-export interface Finding {
-  id: string;
-  ruleId: RuleId;
-  ruleName: string;
-  summary: string;
-  evidence: EvidenceItem[];
-  rulesVersion: string;
-  createdAt: string;
-}
-
-export interface FindingList {
-  items: Finding[];
-}
-
-export type ScanStatus = 'not_detected' | 'detected' | 'unsupported' | 'error';
-
-export interface Attachment {
-  id: string;
-  fileName: string | null;
-  declaredType: string | null;
-  detectedType: string | null;
-  sizeBytes: number;
-  sha256: string;
-  scanStatus: ScanStatus;
-  scanDetail: string | null;
-  scannedAt: string | null;
-}
-
-export interface AttachmentList {
-  items: Attachment[];
-}
-
-export type IndicatorType = 'domain' | 'url' | 'sha256' | 'sender';
-
-export type NoteKind = 'limited' | 'no_findings' | 'failed' | 'auth_informative';
-
-export interface GuideFinding {
-  ruleId: RuleId;
-  title: string;
-  whatItMeans: string;
-  whyRisky: string;
-  whatToDo: string[];
-  forAnalyst: string[];
-  evidence: EvidenceItem[];
-}
-
-export type IndicatorStatus = 'proposed' | 'confirmed' | 'dismissed';
-
-export interface Indicator {
-  id: string;
-  type: IndicatorType;
-  displayValue: string;
-  status: IndicatorStatus;
-  reportId: string | null;
-  proposedBy: { id: string; displayName: string };
-  decidedBy: { id: string; displayName: string } | null;
-  createdAt: string;
-  decidedAt: string | null;
-}
-
-export interface MessageSummary {
-  id: string;
-  mailboxId: string;
-  location: 'inbox' | 'quarantine';
-  uid: number;
-  uidValidity: number;
-  subject: string | null;
-  fromAddress: string | null;
-  date: string | null;
-  hasAttachments: boolean;
-  linksCount: number;
-  quarantined: boolean;
-}
-
-export interface CandidateReason {
-  indicatorId: string;
-  kind: IndicatorType;
-  location: 'link' | 'from' | 'reply_to' | 'attachment';
-  matchedValue: string;
-}
-
-export interface Candidate {
-  message: MessageSummary;
-  reasons: CandidateReason[];
-}
-
-export type QuarantineOutcome = 'quarantined' | 'already_quarantined' | 'uidvalidity_mismatch' | 'not_found' | 'error';
-
-export interface QuarantineResult {
-  messageId: string;
-  outcome: QuarantineOutcome;
-  actionId: string | null;
-  detail: string | null;
-}
-
-export interface QuarantineResponse {
-  incidentId: string;
-  results: QuarantineResult[];
-}
-
-export interface Action {
-  id: string;
-  incidentId: string;
-  messageId: string;
-  type: 'quarantine' | 'restore';
-  status: 'done' | 'failed';
-  originalLocation: { folder: string; uid: number; uidValidity: number };
-  newLocation: { folder: string; uid: number; uidValidity: number } | null;
-  actor: { id: string; displayName: string };
-  createdAt: string;
-}
-
-export interface RestoreResponse {
-  actionId: string;
-  outcome: 'restored' | 'already_restored' | 'uidvalidity_mismatch' | 'not_found' | 'error';
-  restoreActionId: string | null;
-  detail: string | null;
-}
-
-export interface AuditEvent {
-  id: string;
-  at: string;
-  action: string;
-  result: 'success' | 'failure' | 'denied';
-  actor: { id: string; displayName: string } | null;
-  targetType: string | null;
-  targetId: string | null;
-  requestId: string | null;
-  metadata: object;
-}
-
-export type MailboxLabel = 'student' | 'teacher' | 'staff';
-export type SyncStatus = 'ok' | 'error' | 'never';
-export type MessageLocation = 'inbox' | 'quarantine';
-
-export interface Mailbox {
-  id: string;
-  label: MailboxLabel;
-  address: string;
-  lastSyncAt: string | null;
-  lastSyncStatus: SyncStatus;
-  messageCount: number;
-}
-
-export interface MessageDetail extends MessageSummary {
-  links: ReportLink[];
-  attachments: Attachment[];
-  authentication: { spf: AuthResult; dkim: AuthResult; dmarc: AuthResult } | null;
-}
-
-export type IncidentStatus = 'received' | 'analyzing' | 'contained' | 'closed' | 'false_positive';
-
-export interface Comment {
-  id: string;
-  author: { id: string; displayName: string };
-  body: string;
-  createdAt: string;
-}
-
-export interface IncidentSummary {
-  id: string;
-  title: string;
-  status: IncidentStatus;
-  reportsCount: number;
-  indicatorsCount: number;
-  createdBy: { id: string; displayName: string };
-  createdAt: string;
-  updatedAt: string;
-}
-
-export interface IncidentDetail extends IncidentSummary {
-  description: string | null;
-  reports: ReportSummary[];
-  indicators: Indicator[];
-  comments: Comment[];
-}
-
-export interface SyncResult {
-  mailboxId: string;
-  fetched: number;
-  added: number;
-  updated: number;
-  uidValidityChanged: boolean;
-  finishedAt: string;
-}
-
-export interface Exclusion {
-  id: string | null;
-  domain: string;
-  source: 'config' | 'manual';
-  reason: string | null;
-  createdAt: string | null;
-}
-
-export interface ReportDocument {
-  reportId: string;
-  generatedAt: string;
-  rulesVersion: string | null;
-  guideVersion: string;
-  status: ReportStatus;
-  limitedReason: LimitedReason | null;
-  priority: Priority | null;
-  summary: { headline: string; text: string };
-  findings: GuideFinding[];
-  indicators: { type: IndicatorType; displayValue: string }[];
-  attachments: { fileName: string | null; sha256: string; scanStatus: ScanStatus }[];
-  notes: { kind: NoteKind; title: string; text: string }[];
-}
-
-export interface PasteBody {
-  text: string;
 }

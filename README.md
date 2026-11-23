@@ -83,21 +83,23 @@ publica 80/443 en la instancia; hasta entonces este es el montaje local.
 
 ## Tipos de la API
 
-Los tipos en `src/api/types.ts` son un espejo escrito a mano del contrato v0.2.0. Para
-regenerarlos desde el OpenAPI cuando el contrato cambie:
+Los tipos se generan desde `contract/openapi.json` v0.3.0 del repo de la API. El archivo
+generado es `src/api/schema.d.ts`; `src/api/types.ts` solo define alias con los nombres que usa
+el front. Cuando el contrato cambie:
 
 ```bash
-npx openapi-typescript ../correobajolupa-api/contract/openapi.json -o src/api/schema.d.ts
+npm run api:types
+npm run typecheck
 ```
 
-Después se puede migrar el cliente a `paths`/`components` de `schema.d.ts`. Hasta entonces,
-los tipos manuales evitan una dependencia de build y son auditables línea por línea.
+El repo de la API debe estar clonado como carpeta hermana (`../correobajolupa-api`).
 
 ## Estado
 
-Las rutas `/reports` del back aún no están implementadas (solo M0: `auth` y `users`). Las
-pantallas de reportes están construidas contra el contrato y empezarán a funcionar cuando el
-back suba M1.
+El front cubre el contrato v0.3.0 completo (M0 a M7). El back sirve hoy M0, M1 y M2
+(adjuntos con ClamAV); las rutas de M3 a M7 están declaradas en el contrato pero todavía no
+se implementan en la API, así que se prueba con un servidor simulado. El visor HTML requiere
+que la ruta `/reports/{id}/html` no envíe `X-Frame-Options: DENY` (ver 0.2.2 del contrato).
 
 ## Repositorio
 
