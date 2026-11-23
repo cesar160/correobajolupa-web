@@ -1436,6 +1436,8 @@ textarea:is(:user-invalid, .user-invalid-fallback) {
   inline-size: 11rem;
   block-size: 11rem;
   border-radius: var(--radius-control);
+  translate: var(--sphere-x, 0px) var(--sphere-y, 0px);
+  pointer-events: none;
   background: radial-gradient(
     circle at var(--sphere-light-x, 32%) var(--sphere-light-y, 28%),
     #ffb085 0%,
@@ -1443,12 +1445,14 @@ textarea:is(:user-invalid, .user-invalid-fallback) {
     #0447ff 68%,
     #2b0b6b 100%
   );
-  pointer-events: none;
 }
 
 @media (prefers-reduced-motion: no-preference) {
   .sphere {
-    transition: --sphere-light-x 180ms ease-out, --sphere-light-y 180ms ease-out;
+    transition:
+      translate 240ms ease-out,
+      --sphere-light-x 180ms ease-out,
+      --sphere-light-y 180ms ease-out;
   }
 }
 
