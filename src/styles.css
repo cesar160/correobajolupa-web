@@ -1158,20 +1158,34 @@ tbody th small,
 }
 
 .analyze-stepbar {
+  position: relative;
   display: flex;
   align-items: flex-start;
-  justify-content: space-between;
   gap: 1rem;
-  flex-wrap: wrap;
+}
+
+/* El componente de pestañas debe estirarse: si no, se dimensiona a su
+   contenido y las tarjetas quedan estrechas en ventanas anchas. */
+.analyze-stepbar > .tabs {
+  flex: 1 1 auto;
+  min-inline-size: 0;
 }
 
 .step-meta {
-  padding-block: 0.75rem;
+  position: absolute;
+  inset-block-start: 1.9rem;
+  inset-inline-end: 0;
   font-size: 0.6875rem;
   font-weight: 500;
   letter-spacing: 0.09em;
   text-transform: uppercase;
   color: var(--color-slate);
+}
+
+@media (max-width: 48rem) {
+  .step-meta {
+    display: none;
+  }
 }
 
 .analyze-stack {
