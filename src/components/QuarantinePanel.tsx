@@ -159,6 +159,7 @@ export function QuarantinePanel({ incidentId, indicators }: { incidentId: string
         open={confirming}
         title="¿Poner los mensajes en cuarentena?"
         description={`Se moverán ${selected.size} mensaje(s) a la carpeta de cuarentena del laboratorio. La acción es reversible desde "Acciones".`}
+        confirmLabel="Poner en cuarentena"
         busy={busy}
         onConfirm={execute}
         onClose={() => setConfirming(false)}

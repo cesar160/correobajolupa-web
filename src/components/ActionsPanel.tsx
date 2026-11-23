@@ -102,6 +102,7 @@ export function ActionsPanel({ incidentId }: { incidentId: string }) {
         open={pending !== null}
         title="¿Restaurar el mensaje?"
         description="Se verificará el mensaje antes de devolverlo a su ubicación original. La restauración queda en la auditoría."
+        confirmLabel="Restaurar"
         busy={busy}
         onConfirm={restore}
         onClose={() => setPending(null)}

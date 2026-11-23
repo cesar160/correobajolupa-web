@@ -4,12 +4,11 @@
 **Formato:** 1920×1080, 30 fps, voz en español + subtítulos.
 **Regla de oro:** usar solo **datos sintéticos**. Nada de correos, nombres ni contraseñas reales.
 
-> **Nota para grabar con la API real:** hoy el back sirve M0–M6. Las rutas de **M7**
-> (`/audit`, `/incidents/{id}/actions`, `/incidents/{id}/quarantine`, `/actions/{id}/restore`)
-> devuelven **404**. Por eso, con API real **omite el bloque de auditoría (3:35–4:00)** del
-> guion y cierra en el incidente. Si quieres mostrar cuarentena/auditoría, espera a que M7
-> esté integrado o graba ese tramo con el servidor simulado, aclarando en el video que es una
-> simulación.
+> **Estado del back:** el API real sirve **M0–M7**. Puedes grabar el recorrido completo,
+> incluida la cuarentena y la auditoría. El archivo `.eml` sintético está en el escritorio
+> (`becas-institucionales.eml`). Datos ya sembrados: indicador `banco-ejemplo[.]example` con
+> candidato, incidente `Campaña de becas falsas` en estado `analyzing` con ese indicador
+> asociado y una acción de cuarentena ya ejecutada.
 
 ---
 
@@ -122,19 +121,18 @@ Cópialo antes a un lugar visible del escritorio, por ejemplo `becas-institucion
 
 ---
 
-### 3:35 – 4:00 · Cierre (versión API real)
+### 3:35 – 4:00 · Auditoría y cierre
 
 **Acciones:**
-1. Desde el incidente, vuelve al **Panel principal**.
-2. Deja el título final en pantalla 3 segundos.
+1. En el incidente, pestaña **Cuarentena**: selecciona el mensaje y pulsa **Poner en cuarentena**; confirma. Muestra el resultado "En cuarentena".
+2. Pestaña **Acciones**: pulsa **Restaurar** en la acción; confirma. Muestra "Restauración: restored".
+3. Sidebar → **Auditoría**: muestra los eventos `quarantine.execute` y `quarantine.restore`.
+4. Vuelve al Panel principal y deja el título final 3 segundos.
 
 **Di:**
-> "Con esto cerramos: análisis explicable, contenido aislado y correlación de indicadores en un incidente. La cuarentena y la auditoría quedan como siguiente etapa del proyecto. Gracias."
+> "La cuarentena se aprueba mensaje por mensaje, es reversible desde Acciones, y cada movimiento queda en la auditoría sin asuntos ni direcciones completas. Con esto cerramos: análisis explicable, contenido aislado y respuestas reversibles. Gracias."
 
 **Texto en pantalla:** `CorreoBajoLupa · Proyecto académico de Seguridad Informática`
-
-> Si M7 ya está integrado, recupera el bloque original: Sidebar → **Auditoría**, muestra los
-> eventos y di: *"Todas las acciones quedan registradas, sin asuntos ni direcciones completas"*.
 
 ---
 
