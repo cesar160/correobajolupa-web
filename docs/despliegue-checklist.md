@@ -1,7 +1,8 @@
 # Checklist previo al despliegue (EC2)
 
-Fuente: `Guia_Despliegue_CorreoBajoLupa.pdf` y `comandos_despliegue.txt`.
-Este archivo es solo la verificación **antes** de ejecutar los bloques en el servidor.
+Fuente: `Guia_Despliegue_CorreoBajoLupa.pdf` (leída y transcrita el 23-nov-2026) y
+`comandos_despliegue.txt`. Este archivo es solo la verificación **antes** de ejecutar los
+bloques en el servidor. Tiempo estimado: 40–60 min (15 de espera).
 
 ## 1. Repositorios
 
@@ -41,9 +42,8 @@ git clone -c core.autocrlf=false https://github.com/cesar160/correobajolupa-web.
 - [ ] `FIRST_ADMIN_EMAIL=admin@ejemplo.invalid`.
 - [ ] **Anotar la contraseña del admin** que imprime el bloque 4, en un lugar privado.
 - [ ] `INSTITUTIONAL_DOMAINS=universidad-ejemplo.example` (configura la regla R3).
-- [ ] **TRUST_PROXY_HOPS**: la guía pone `2`, pero el README de la API dice `1` con el perfil
-      `web`. Con Caddy + nginx hay dos proxies; confirmar con quien escribió la guía cuál
-      es el valor correcto antes de fijarlo. Nunca `true`.
+- [x] **TRUST_PROXY_HOPS=2** confirmado por la guía PDF (Bloque 4): dos proxys (Caddy + nginx).
+      El README local dice `1` solo para el caso sin Caddy. Nunca `true`.
 - [ ] `COOKIE_SECURE=true` (por defecto en el Compose de producción) + HTTPS de Caddy.
 
 ## 5. Caddy y HTTPS (bloques 6 y 7)
@@ -73,7 +73,18 @@ git clone -c core.autocrlf=false https://github.com/cesar160/correobajolupa-web.
 - [ ] **Nunca** `docker compose down -v` ni `docker volume rm`: borra la base de datos.
 - [ ] No compartir la contrasena del admin ni el `.env`.
 
-## 9. Reinicio del Learner Lab
+## 9. Confirmado por el PDF
+
+- [ ] Acceso por **EC2 Instance Connect** (pestaña *Connect*, usuario `ubuntu`). No hace falta
+      `.pem` ni PuTTY. Pegar con **Ctrl+Shift+V**.
+- [ ] Regla SSH 22 abierta al mundo (la pide el botón Connect). Quitarla после la presentación.
+- [ ] `migrate` en **Exited (0)** es correcto; ClamAV tarda 2–3 min en cargar firmas.
+- [ ] Bloque 11: `lab-seed` inserta 21 mensajes sintéticos, es repetible.
+- [ ] Probar desde el celular con datos móviles antes de la presentación.
+- [ ] Aviso de la guía: la combinación Caddy + base vacía + volumen nuevo aún no se probó de
+      punta a punta; si algo difiere, copiar la salida y mandarla a Angel, sin improvisar.
+
+## 10. Reinicio del Learner Lab
 
 Tras cerrar/abrir el laboratorio:
 
