@@ -6,7 +6,12 @@ import type {
   Indicator,
   IndicatorStatus,
   IndicatorType,
+  Mailbox,
+  MessageDetail,
+  MessageLocation,
+  MessageSummary,
   Paginated,
+  SyncResult,
   FindingList,
   LoginBody,
   RegisterBody,
@@ -208,6 +213,18 @@ export const api = {
     request<Exclusion>('/exclusions', { method: 'POST', json: body }),
   deleteExclusion: (id: string) =>
     request<void>(`/exclusions/${segment(id)}`, { method: 'DELETE' }),
+
+  listMailboxes: () => request<{ items: Mailbox[] }>('/mailboxes'),
+  syncMailbox: (id: string) =>
+    request<SyncResult>(`/mailboxes/${segment(id)}/sync`, { method: 'POST' }),
+  simulateDelivery: (mailboxId: string, reportId: string) =>
+    request<{ message: MessageSummary }>(`/mailboxes/${segment(mailboxId)}/simulated-delivery`, {
+      method: 'POST',
+      json: { reportId },
+    }),
+  listMessages: (params: { mailboxId?: string; location?: MessageLocation | ''; page?: number; pageSize?: number } = {}) =>
+    request<Paginated<MessageSummary>>(`/messages${query(params)}`),
+  getMessage: (id: string) => request<MessageDetail>(`/messages/${segment(id)}`),
   getReportText: (id: string) =>
     request<string>(`/reports/${segment(id)}/text`, { accept: 'text/plain' }),
   reportHtmlUrl: (id: string) => `${API_BASE}/reports/${segment(id)}/html`,

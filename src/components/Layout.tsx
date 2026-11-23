@@ -3,8 +3,10 @@ import {
   Ban,
   ClipboardList,
   Fingerprint,
+  Inbox,
   LayoutDashboard,
   LogOut,
+  Mail,
   Menu,
   PlusCircle,
   Users,
@@ -22,6 +24,8 @@ const TITLES: Record<string, string> = {
   '/users': 'Usuarios | CorreoBajoLupa',
   '/indicators': 'Indicadores | CorreoBajoLupa',
   '/exclusions': 'Exclusiones | CorreoBajoLupa',
+  '/mailboxes': 'Buzones | CorreoBajoLupa',
+  '/messages': 'Mensajes | CorreoBajoLupa',
 };
 
 const ROLE_LABEL = {
@@ -123,9 +127,17 @@ export function Layout() {
             <Icon as={Fingerprint} /> Indicadores
           </NavLink>
           {hasRole('analyst', 'admin') && (
-            <NavLink to="/exclusions">
-              <Icon as={Ban} /> Exclusiones
-            </NavLink>
+            <>
+              <NavLink to="/mailboxes">
+                <Icon as={Inbox} /> Buzones
+              </NavLink>
+              <NavLink to="/messages">
+                <Icon as={Mail} /> Mensajes
+              </NavLink>
+              <NavLink to="/exclusions">
+                <Icon as={Ban} /> Exclusiones
+              </NavLink>
+            </>
           )}
           {hasRole('admin') && (
             <NavLink to="/users">

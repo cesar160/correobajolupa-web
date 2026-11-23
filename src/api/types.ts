@@ -213,6 +213,34 @@ export interface Candidate {
   reasons: CandidateReason[];
 }
 
+export type MailboxLabel = 'student' | 'teacher' | 'staff';
+export type SyncStatus = 'ok' | 'error' | 'never';
+export type MessageLocation = 'inbox' | 'quarantine';
+
+export interface Mailbox {
+  id: string;
+  label: MailboxLabel;
+  address: string;
+  lastSyncAt: string | null;
+  lastSyncStatus: SyncStatus;
+  messageCount: number;
+}
+
+export interface MessageDetail extends MessageSummary {
+  links: ReportLink[];
+  attachments: Attachment[];
+  authentication: { spf: AuthResult; dkim: AuthResult; dmarc: AuthResult } | null;
+}
+
+export interface SyncResult {
+  mailboxId: string;
+  fetched: number;
+  added: number;
+  updated: number;
+  uidValidityChanged: boolean;
+  finishedAt: string;
+}
+
 export interface Exclusion {
   id: string | null;
   domain: string;

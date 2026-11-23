@@ -762,6 +762,31 @@ a {
   --label-4: 'Acción';
 }
 
+.mailboxes-table {
+  --label-2: 'Dirección';
+  --label-3: 'Mensajes';
+  --label-4: 'Última sincronización';
+  --label-5: 'Acción';
+}
+
+.messages-table {
+  --label-2: 'Buzón';
+  --label-3: 'Ubicación';
+  --label-4: 'Fecha';
+  --label-5: 'Ver';
+}
+
+.badge-sync-ok {
+  background: var(--color-accent);
+  color: #fff;
+}
+
+.badge-sync-error,
+.badge-sync-never {
+  background: var(--color-canvas);
+  color: var(--color-slate);
+}
+
 .badge-indicator-confirmed,
 .badge-source-manual {
   background: var(--color-accent);
