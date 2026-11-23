@@ -5,7 +5,7 @@ import { api, errorMessage } from '../api/client';
 import type { ReportSummary } from '../api/types';
 import { ConfirmDialog } from '../components/ConfirmDialog';
 import { Icon } from '../components/Icon';
-import { EmptyState, ErrorBox, Notice, StatusBadge } from '../components/ui';
+import { EmptyState, ErrorBox, Notice, PageHeader, StatusBadge } from '../components/ui';
 
 type Category = 'all' | 'analyzing' | 'findings' | 'clean';
 
@@ -111,6 +111,11 @@ export function ReportsPage() {
 
   return (
     <>
+      <PageHeader
+        title="Mis reportes"
+        description="Consulta y organiza los mensajes que has enviado para análisis."
+      />
+
       <ErrorBox message={error} />
       {notice && <Notice message={notice} />}
 
