@@ -2,7 +2,10 @@ import { useEffect, useRef, useState, type FormEvent } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { api, errorMessage } from '../api/client';
 import type { IncidentStatus, IncidentSummary } from '../api/types';
+import { Pagination } from '../components/Pagination';
 import { ErrorBox, formatDate, Notice, PageHeader } from '../components/ui';
+
+const PAGE_SIZE = 20;
 
 const STATUS_LABEL: Record<IncidentStatus, string> = {
   received: 'Recibido',
@@ -15,6 +18,8 @@ const STATUS_LABEL: Record<IncidentStatus, string> = {
 export function IncidentsPage() {
   const navigate = useNavigate();
   const [items, setItems] = useState<IncidentSummary[]>([]);
+  const [page, setPage] = useState(1);
+  const [total, setTotal] = useState(0);
   const [status, setStatus] = useState<IncidentStatus | ''>('');
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
@@ -30,8 +35,9 @@ export function IncidentsPage() {
     setLoading(true);
     setError('');
     try {
-      const data = await api.listIncidents({ status, page: 1, pageSize: 100 });
+      const data = await api.listIncidents({ status, page, pageSize: PAGE_SIZE });
       setItems(data.items);
+      setTotal(data.total);
     } catch (failure) {
       setError(errorMessage(failure));
     } finally {
@@ -41,7 +47,7 @@ export function IncidentsPage() {
 
   useEffect(() => {
     void load();
-  }, [status]);
+  }, [status, page]);
 
   useEffect(() => {
     const dialog = dialogRef.current;
@@ -99,7 +105,7 @@ export function IncidentsPage() {
               type="button"
               className="filter-pill"
               aria-pressed={status === pill.id}
-              onClick={() => setStatus(pill.id)}
+              onClick={() => { setStatus(pill.id); setPage(1); }}
             >
               {pill.label}
             </button>
@@ -148,6 +154,8 @@ export function IncidentsPage() {
           </div>
         )}
       </section>
+
+      <Pagination page={page} pageSize={PAGE_SIZE} total={total} noun="incidentes" onChange={setPage} />
 
       <dialog ref={dialogRef} aria-labelledby="incident-title" onClose={() => setCreating(false)}>
         <h2 id="incident-title">Nuevo incidente</h2>

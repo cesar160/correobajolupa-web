@@ -1,10 +1,15 @@
 import { useEffect, useState } from 'react';
 import { api, errorMessage } from '../api/client';
 import type { AuditEvent } from '../api/types';
+import { Pagination } from '../components/Pagination';
 import { ErrorBox, formatDate, PageHeader } from '../components/ui';
+
+const PAGE_SIZE = 20;
 
 export function AuditPage() {
   const [items, setItems] = useState<AuditEvent[]>([]);
+  const [page, setPage] = useState(1);
+  const [total, setTotal] = useState(0);
   const [action, setAction] = useState('');
   const [actorId, setActorId] = useState('');
   const [from, setFrom] = useState('');
@@ -21,14 +26,14 @@ export function AuditPage() {
       actorId: actorId || undefined,
       from: from || undefined,
       to: to || undefined,
-      page: 1,
-      pageSize: 100,
+      page,
+      pageSize: PAGE_SIZE,
     })
-      .then((data) => { if (alive) setItems(data.items); })
+      .then((data) => { if (alive) { setItems(data.items); setTotal(data.total); } })
       .catch((failure) => { if (alive) setError(errorMessage(failure)); })
       .finally(() => { if (alive) setLoading(false); });
     return () => { alive = false; };
-  }, [action, actorId, from, to]);
+  }, [action, actorId, from, to, page]);
 
   return (
     <>
@@ -42,19 +47,19 @@ export function AuditPage() {
       <div className="filter-row">
         <div className="field field-inline">
           <label htmlFor="audit-action">Acción</label>
-          <input id="audit-action" value={action} onChange={(event) => setAction(event.target.value)} placeholder="quarantine.execute" />
+          <input id="audit-action" value={action} onChange={(event) => { setAction(event.target.value); setPage(1); }} placeholder="quarantine.execute" />
         </div>
         <div className="field field-inline">
           <label htmlFor="audit-actor">ID de actor</label>
-          <input id="audit-actor" value={actorId} onChange={(event) => setActorId(event.target.value)} />
+          <input id="audit-actor" value={actorId} onChange={(event) => { setActorId(event.target.value); setPage(1); }} />
         </div>
         <div className="field field-inline">
           <label htmlFor="audit-from">Desde</label>
-          <input id="audit-from" type="date" value={from} onChange={(event) => setFrom(event.target.value)} />
+          <input id="audit-from" type="date" value={from} onChange={(event) => { setFrom(event.target.value); setPage(1); }} />
         </div>
         <div className="field field-inline">
           <label htmlFor="audit-to">Hasta</label>
-          <input id="audit-to" type="date" value={to} onChange={(event) => setTo(event.target.value)} />
+          <input id="audit-to" type="date" value={to} onChange={(event) => { setTo(event.target.value); setPage(1); }} />
         </div>
       </div>
 
@@ -94,6 +99,8 @@ export function AuditPage() {
           </div>
         )}
       </section>
+
+      <Pagination page={page} pageSize={PAGE_SIZE} total={total} noun="eventos" onChange={setPage} />
     </>
   );
 }

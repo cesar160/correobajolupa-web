@@ -12,7 +12,8 @@ function canTransitionDisplay(): boolean {
   // completa, así que el sondeo devuelve false correctamente.
   probe.style.cssText = 'transition: display 1s allow-discrete !important; display: block;';
   document.body.appendChild(probe);
-  getComputedStyle(probe).display;
+  // Leer el estilo fuerza el cálculo antes del cambio; el resultado se descarta.
+  void getComputedStyle(probe).display;
   probe.style.display = 'none';
   displayTransitionSupport = getComputedStyle(probe).display === 'block';
   probe.remove();

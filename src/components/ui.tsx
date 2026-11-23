@@ -45,6 +45,47 @@ export function ErrorBox({ message }: { message: string }) {
   );
 }
 
+export function PaginationNav({
+  page,
+  pages,
+  totalPages,
+  onChange,
+  label,
+}: {
+  page: number;
+  pages: number[];
+  totalPages: number;
+  onChange: (page: number) => void;
+  label: string;
+}) {
+  return (
+    <nav aria-label={label} className="page-controls">
+      <button type="button" className="page-btn" disabled={page <= 1} onClick={() => onChange(page - 1)}>
+        Anterior
+      </button>
+      {pages.map((number) => (
+        <button
+          key={number}
+          type="button"
+          className="page-btn"
+          aria-current={number === page ? 'page' : undefined}
+          onClick={() => onChange(number)}
+        >
+          {number}
+        </button>
+      ))}
+      <button
+        type="button"
+        className="page-btn"
+        disabled={page >= totalPages}
+        onClick={() => onChange(page + 1)}
+      >
+        Siguiente
+      </button>
+    </nav>
+  );
+}
+
 export function Notice({ message }: { message: string }) {
   return (
     <p className="notice" role="status">

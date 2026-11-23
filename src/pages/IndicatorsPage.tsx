@@ -3,8 +3,10 @@ import { Link } from 'react-router-dom';
 import { api, errorMessage } from '../api/client';
 import type { Indicator, IndicatorStatus, IndicatorType } from '../api/types';
 import { useAuth } from '../auth/AuthContext';
-import { Notice } from '../components/ui';
-import { ErrorBox, formatDate, PageHeader } from '../components/ui';
+import { Pagination } from '../components/Pagination';
+import { ErrorBox, formatDate, Notice, PageHeader } from '../components/ui';
+
+const PAGE_SIZE = 20;
 
 const STATUS_LABEL: Record<IndicatorStatus, string> = {
   proposed: 'Propuesto',
@@ -23,6 +25,8 @@ export function IndicatorsPage() {
   const { hasRole } = useAuth();
   const canDecide = hasRole('analyst', 'admin');
   const [items, setItems] = useState<Indicator[]>([]);
+  const [page, setPage] = useState(1);
+  const [total, setTotal] = useState(0);
   const [status, setStatus] = useState<IndicatorStatus | ''>('');
   const [type, setType] = useState<IndicatorType | ''>('');
   const [loading, setLoading] = useState(true);
@@ -41,8 +45,9 @@ export function IndicatorsPage() {
     setLoading(true);
     setError('');
     try {
-      const data = await api.listIndicators({ status, type, page: 1, pageSize: 100 });
+      const data = await api.listIndicators({ status, type, page, pageSize: PAGE_SIZE });
       setItems(data.items);
+      setTotal(data.total);
     } catch (failure) {
       setError(errorMessage(failure));
     } finally {
@@ -52,7 +57,7 @@ export function IndicatorsPage() {
 
   useEffect(() => {
     void load();
-  }, [status, type]);
+  }, [status, type, page]);
 
   useEffect(() => {
     const dialog = dialogRef.current;
@@ -122,7 +127,7 @@ export function IndicatorsPage() {
               type="button"
               className="filter-pill"
               aria-pressed={status === pill.id}
-              onClick={() => setStatus(pill.id)}
+              onClick={() => { setStatus(pill.id); setPage(1); }}
             >
               {pill.label}
             </button>
@@ -133,7 +138,7 @@ export function IndicatorsPage() {
           <select
             id="indicator-type"
             value={type}
-            onChange={(event) => setType(event.target.value as IndicatorType | '')}
+            onChange={(event) => { setType(event.target.value as IndicatorType | ''); setPage(1); }}
           >
             <option value="">Todos los tipos</option>
             {(Object.keys(TYPE_LABEL) as IndicatorType[]).map((value) => (
@@ -198,6 +203,8 @@ export function IndicatorsPage() {
           </div>
         )}
       </section>
+
+      <Pagination page={page} pageSize={PAGE_SIZE} total={total} noun="indicadores" onChange={setPage} />
 
       <dialog ref={dialogRef} aria-labelledby="propose-title" onClose={() => setProposing(false)}>
         <h2 id="propose-title">Proponer indicador</h2>

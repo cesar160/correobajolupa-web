@@ -34,6 +34,10 @@ jobs:
           cache: npm
       - name: Instalar dependencias
         run: npm ci
+      - name: Estilo
+        run: npm run lint
+      - name: Pruebas
+        run: npm run test
       - name: Tipos
         run: npm run typecheck
       - name: Compilar

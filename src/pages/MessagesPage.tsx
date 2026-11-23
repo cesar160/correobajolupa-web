@@ -2,13 +2,18 @@ import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { api, errorMessage } from '../api/client';
 import type { Mailbox, MessageLocation, MessageSummary } from '../api/types';
+import { Pagination } from '../components/Pagination';
 import { EmptyState, ErrorBox, PageHeader } from '../components/ui';
+
+const PAGE_SIZE = 20;
 
 const shortDate = (iso: string | null) =>
   iso ? new Intl.DateTimeFormat('es-MX', { day: '2-digit', month: 'short', year: 'numeric' }).format(new Date(iso)) : '—';
 
 export function MessagesPage() {
   const [items, setItems] = useState<MessageSummary[]>([]);
+  const [page, setPage] = useState(1);
+  const [total, setTotal] = useState(0);
   const [mailboxes, setMailboxes] = useState<Mailbox[]>([]);
   const [mailboxId, setMailboxId] = useState('');
   const [location, setLocation] = useState<MessageLocation | ''>('inbox');
@@ -25,12 +30,12 @@ export function MessagesPage() {
     let alive = true;
     setLoading(true);
     setError('');
-    api.listMessages({ mailboxId: mailboxId || undefined, location, page: 1, pageSize: 100 })
-      .then((data) => { if (alive) setItems(data.items); })
+    api.listMessages({ mailboxId: mailboxId || undefined, location, page, pageSize: PAGE_SIZE })
+      .then((data) => { if (alive) { setItems(data.items); setTotal(data.total); } })
       .catch((failure) => { if (alive) setError(errorMessage(failure)); })
       .finally(() => { if (alive) setLoading(false); });
     return () => { alive = false; };
-  }, [mailboxId, location]);
+  }, [mailboxId, location, page]);
 
   const mailboxLabel = (id: string) => {
     const mailbox = mailboxes.find((item) => item.id === id);
@@ -60,7 +65,7 @@ export function MessagesPage() {
               type="button"
               className="filter-pill"
               aria-pressed={location === pill.id}
-              onClick={() => setLocation(pill.id)}
+              onClick={() => { setLocation(pill.id); setPage(1); }}
             >
               {pill.label}
             </button>
@@ -68,7 +73,7 @@ export function MessagesPage() {
         </div>
         <div className="field field-inline">
           <label htmlFor="mailbox-filter" className="visually-hidden">Buzón</label>
-          <select id="mailbox-filter" value={mailboxId} onChange={(event) => setMailboxId(event.target.value)}>
+          <select id="mailbox-filter" value={mailboxId} onChange={(event) => { setMailboxId(event.target.value); setPage(1); }}>
             <option value="">Todos los buzones</option>
             {mailboxes.map((mailbox) => (
               <option key={mailbox.id} value={mailbox.id}>{mailbox.address}</option>
@@ -125,6 +130,8 @@ export function MessagesPage() {
           </div>
         )}
       </section>
+
+      <Pagination page={page} pageSize={PAGE_SIZE} total={total} noun="mensajes" onChange={setPage} />
     </>
   );
 }

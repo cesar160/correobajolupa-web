@@ -2,7 +2,10 @@ import { useEffect, useState } from 'react';
 import { Link, useParams } from 'react-router-dom';
 import { api, errorMessage } from '../api/client';
 import type { Candidate, IndicatorType } from '../api/types';
+import { Pagination } from '../components/Pagination';
 import { EmptyState, ErrorBox, PageHeader } from '../components/ui';
+
+const PAGE_SIZE = 20;
 
 const TYPE_LABEL: Record<IndicatorType, string> = {
   domain: 'Dominio',
@@ -21,6 +24,8 @@ const LOCATION_LABEL: Record<string, string> = {
 export function CandidatesPage() {
   const { id = '' } = useParams();
   const [items, setItems] = useState<Candidate[]>([]);
+  const [page, setPage] = useState(1);
+  const [total, setTotal] = useState(0);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
 
@@ -28,12 +33,12 @@ export function CandidatesPage() {
     let alive = true;
     setLoading(true);
     setError('');
-    api.listCandidates(id, { page: 1, pageSize: 100 })
-      .then((data) => { if (alive) setItems(data.items); })
+    api.listCandidates(id, { page, pageSize: PAGE_SIZE })
+      .then((data) => { if (alive) { setItems(data.items); setTotal(data.total); } })
       .catch((failure) => { if (alive) setError(errorMessage(failure)); })
       .finally(() => { if (alive) setLoading(false); });
     return () => { alive = false; };
-  }, [id]);
+  }, [id, page]);
 
   return (
     <>
@@ -78,6 +83,8 @@ export function CandidatesPage() {
           ))}
         </div>
       )}
+
+      <Pagination page={page} pageSize={PAGE_SIZE} total={total} noun="candidatos" onChange={setPage} />
 
       <div className="doc-actions">
         <Link className="btn btn-outline" to="/indicators">Volver a indicadores</Link>
