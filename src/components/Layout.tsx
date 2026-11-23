@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { ClipboardList, LogOut, PlusCircle, Users } from 'lucide-react';
+import { ClipboardList, LayoutDashboard, LogOut, PlusCircle, Users } from 'lucide-react';
 import { NavLink, Outlet, useLocation, useNavigate } from 'react-router-dom';
 import { errorMessage } from '../api/client';
 import { useAuth } from '../auth/AuthContext';
@@ -7,6 +7,7 @@ import { Icon } from './Icon';
 import { ErrorBox } from './ui';
 
 const TITLES: Record<string, string> = {
+  '/panel': 'Panel principal | CorreoBajoLupa',
   '/reports': 'Mis reportes | CorreoBajoLupa',
   '/reports/new': 'Analizar correo | CorreoBajoLupa',
   '/users': 'Usuarios | CorreoBajoLupa',
@@ -65,11 +66,14 @@ export function Layout() {
         </div>
 
         <nav aria-label="Navegación principal" className="sidebar-nav">
-          <NavLink to="/reports" end>
-            <Icon as={ClipboardList} /> Mis reportes
+          <NavLink to="/panel" end>
+            <Icon as={LayoutDashboard} /> Panel principal
           </NavLink>
           <NavLink to="/reports/new">
             <Icon as={PlusCircle} /> Analizar correo
+          </NavLink>
+          <NavLink to="/reports" end>
+            <Icon as={ClipboardList} /> Mis reportes
           </NavLink>
           {hasRole('admin') && (
             <NavLink to="/users">

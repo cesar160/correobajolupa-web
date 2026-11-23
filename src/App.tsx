@@ -3,6 +3,7 @@ import { flushSync } from 'react-dom';
 import { Link, Navigate, Route, Routes, useLocation, type Location } from 'react-router-dom';
 import { ProtectedRoute } from './auth/ProtectedRoute';
 import { Layout } from './components/Layout';
+import { DashboardPage } from './pages/DashboardPage';
 import { LoginPage } from './pages/LoginPage';
 import { NewReportPage } from './pages/NewReportPage';
 import { RegisterPage } from './pages/RegisterPage';
@@ -15,8 +16,8 @@ function NotFound() {
     <div className="center-state">
       <h1 tabIndex={-1}>Página no encontrada</h1>
       <p>La ruta que buscas no existe.</p>
-      <Link className="btn btn-outline" to="/reports">
-        Ir a reportes
+      <Link className="btn btn-outline" to="/panel">
+        Ir al panel principal
       </Link>
     </div>
   );
@@ -48,11 +49,12 @@ function AnimatedRoutes() {
 
   return (
     <Routes location={displayed}>
-      <Route path="/" element={<Navigate to="/reports" replace />} />
+      <Route path="/" element={<Navigate to="/panel" replace />} />
       <Route path="/login" element={<LoginPage />} />
       <Route path="/register" element={<RegisterPage />} />
 
       <Route element={<ProtectedRoute><Layout /></ProtectedRoute>}>
+        <Route path="/panel" element={<DashboardPage />} />
         <Route path="/reports" element={<ReportsPage />} />
         <Route path="/reports/new" element={<NewReportPage />} />
         <Route path="/reports/:id" element={<ReportDetailPage />} />

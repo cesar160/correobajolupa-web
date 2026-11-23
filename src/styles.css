@@ -457,6 +457,132 @@ a {
   flex-wrap: wrap;
 }
 
+/* Panel principal */
+
+.hero-card {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 2rem;
+  flex-wrap: wrap;
+  padding: 2rem 2.25rem;
+  margin-block-end: 1.25rem;
+  border-radius: var(--radius-card);
+  background: var(--color-dark-soft);
+  color: #fff;
+}
+
+.hero-eyebrow {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-block-end: 1rem;
+  color: rgba(255, 255, 255, 0.7);
+  font-size: 0.6875rem;
+  font-weight: 500;
+  letter-spacing: 0.09em;
+  text-transform: uppercase;
+}
+
+.hero-dot {
+  inline-size: 0.4rem;
+  block-size: 0.4rem;
+  border-radius: var(--radius-control);
+  background: var(--color-accent);
+}
+
+.hero-card h2 {
+  max-inline-size: 22ch;
+}
+
+.hero-card > div > p:last-child {
+  margin-block-start: 0.6rem;
+  color: rgba(255, 255, 255, 0.7);
+  font-size: 0.875rem;
+  max-inline-size: 46ch;
+}
+
+.btn-light {
+  background: #fff;
+  color: var(--color-ink);
+}
+
+.btn-light:hover {
+  background: var(--color-hairline);
+}
+
+.stats-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 12rem), 1fr));
+  gap: 1rem;
+  margin-block-end: 1.25rem;
+}
+
+.stat-card {
+  padding: 1.25rem;
+  display: grid;
+  gap: 0.4rem;
+}
+
+.stat-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.5rem;
+}
+
+.stat-label {
+  color: var(--color-slate);
+  font-size: 0.8125rem;
+}
+
+.stat-icon {
+  inline-size: 2rem;
+  block-size: 2rem;
+  display: grid;
+  place-items: center;
+  border-radius: var(--radius-control);
+  background: var(--color-canvas);
+  color: var(--color-ink);
+}
+
+.stat-number {
+  font-family: var(--font-display);
+  font-size: 2.25rem;
+  font-weight: 600;
+  line-height: 1;
+}
+
+.stat-caption {
+  color: var(--color-slate);
+  font-size: 0.75rem;
+}
+
+.recent-card {
+  padding: 1.5rem;
+}
+
+.recent-card-head {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 1rem;
+  flex-wrap: wrap;
+  margin-block-end: 1.25rem;
+}
+
+.recent-table {
+  --label-2: 'Fecha';
+  --label-3: 'Estado';
+  --label-4: 'Ver';
+}
+
+.recent-note {
+  margin-block-start: 1rem;
+  color: var(--color-slate);
+  font-size: 0.75rem;
+}
+
 .center-state {
   min-block-size: 60vh;
   display: grid;
