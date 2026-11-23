@@ -112,8 +112,8 @@ Cópialo antes a un lugar visible del escritorio, por ejemplo `becas-institucion
 ### 2:50 – 3:35 · Correlación y respuesta
 
 **Acciones:**
-1. Sidebar → **Indicadores**. Muestra un dominio confirmado y su enlace **Ver candidatos ↗**.
-2. Click en **Ver candidatos**: muestra 1 mensaje con sus razones.
+1. Sidebar → **Indicadores**. Hay dos indicadores confirmados; elige el de **`banco-ejemplo[.]example`** y su enlace **Ver candidatos ↗** (el otro dominio no tiene mensajes indexados y mostraría la lista vacía).
+2. Click en **Ver candidatos**: muestra 1 mensaje ("URGENTE: cuenta suspendida") con su razón **Remitente · Dominio**.
 3. Sidebar → **Incidentes** → abre uno.
 4. Muestra el selector de estado y la pestaña **Cuarentena** (si el back ya tiene M7, selecciona un mensaje y ejecuta la acción).
 
