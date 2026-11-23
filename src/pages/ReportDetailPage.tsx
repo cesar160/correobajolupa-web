@@ -145,9 +145,12 @@ export function ReportDetailPage() {
         title={report.subject ?? '(sin asunto)'}
         description={`Recibido de ${report.fromAddress ?? 'dirección desconocida'} el ${formatDate(report.createdAt)}.`}
         actions={
-          <button type="button" className="btn btn-danger" onClick={() => setConfirming(true)}>
-            <Icon as={Trash2} /> Eliminar reporte
-          </button>
+          <>
+            <Link className="btn btn-outline" to={`/reports/${id}/informe`}>Ver informe ↗</Link>
+            <button type="button" className="btn btn-danger" onClick={() => setConfirming(true)}>
+              <Icon as={Trash2} /> Eliminar reporte
+            </button>
+          </>
         }
       />
 

@@ -152,6 +152,35 @@ export interface AttachmentList {
   items: Attachment[];
 }
 
+export type IndicatorType = 'domain' | 'url' | 'sha256' | 'sender';
+
+export type NoteKind = 'limited' | 'no_findings' | 'failed' | 'auth_informative';
+
+export interface GuideFinding {
+  ruleId: RuleId;
+  title: string;
+  whatItMeans: string;
+  whyRisky: string;
+  whatToDo: string[];
+  forAnalyst: string[];
+  evidence: EvidenceItem[];
+}
+
+export interface ReportDocument {
+  reportId: string;
+  generatedAt: string;
+  rulesVersion: string | null;
+  guideVersion: string;
+  status: ReportStatus;
+  limitedReason: LimitedReason | null;
+  priority: Priority | null;
+  summary: { headline: string; text: string };
+  findings: GuideFinding[];
+  indicators: { type: IndicatorType; displayValue: string }[];
+  attachments: { fileName: string | null; sha256: string; scanStatus: ScanStatus }[];
+  notes: { kind: NoteKind; title: string; text: string }[];
+}
+
 export interface PasteBody {
   text: string;
 }

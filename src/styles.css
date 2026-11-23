@@ -611,6 +611,140 @@ a {
   font-size: 0.75rem;
 }
 
+/* Informe de seguridad */
+
+.doc-hero {
+  padding: 1.75rem;
+  margin-block-end: 1rem;
+}
+
+.doc-hero-head {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 1.5rem;
+  flex-wrap: wrap;
+}
+
+.doc-hero-badges {
+  display: flex;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+}
+
+.doc-summary {
+  margin-block-start: 0.6rem;
+  color: var(--color-slate);
+  font-size: 0.9375rem;
+  max-inline-size: 65ch;
+  text-wrap: pretty;
+}
+
+.doc-meta {
+  display: flex;
+  gap: 1.25rem;
+  flex-wrap: wrap;
+  margin-block-start: 1.25rem;
+  padding-block-start: 1rem;
+  border-block-start: 1px solid var(--color-hairline);
+  color: var(--color-slate);
+  font-size: 0.75rem;
+}
+
+.doc-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 1rem;
+  margin-block: 1rem;
+}
+
+@media (max-width: 52rem) {
+  .doc-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+.guide-steps {
+  list-style: none;
+  margin: 1rem 0 0;
+  padding: 0;
+  display: grid;
+  gap: 0.6rem;
+}
+
+.guide-steps li {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.85rem;
+  padding: 0.85rem 1rem;
+  border-radius: 16px;
+  background: var(--color-frost);
+  font-size: 0.875rem;
+}
+
+.indicator-list {
+  display: grid;
+  gap: 0.5rem;
+  margin-block-start: 1rem;
+}
+
+.indicator-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  flex-wrap: wrap;
+  padding: 0.75rem 1rem;
+  border-radius: 16px;
+  background: var(--color-frost);
+  font-size: 0.875rem;
+  overflow-wrap: anywhere;
+}
+
+.doc-subheading {
+  margin-block-start: 1.5rem;
+}
+
+.doc-findings {
+  margin-block: 1.5rem 1rem;
+}
+
+.doc-finding-grid {
+  display: grid;
+  gap: 1rem;
+}
+
+.guide-card {
+  display: grid;
+  gap: 1rem;
+}
+
+.guide-card h3 {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  flex-wrap: wrap;
+}
+
+.guide-section p,
+.guide-section li {
+  color: var(--color-slate);
+  font-size: 0.875rem;
+  max-inline-size: 65ch;
+}
+
+.guide-section ul {
+  margin: 0.4rem 0 0;
+  padding-inline-start: 1.25rem;
+}
+
+.doc-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 0.75rem;
+  flex-wrap: wrap;
+}
+
 .center-state {
   min-block-size: 60vh;
   display: grid;

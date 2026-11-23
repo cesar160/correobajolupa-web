@@ -5,6 +5,7 @@ import type {
   LoginBody,
   RegisterBody,
   ReportDetail,
+  ReportDocument,
   ReportList,
   ReportSummary,
   Session,
@@ -117,13 +118,16 @@ async function request<T>(path: string, options: RequestOptions = {}): Promise<T
     // reconstruimos con el código y un mensaje que diga qué hacer.
     const err = isJson ? (payload as Partial<ErrorResponse> | undefined) : undefined;
     const tooLarge = response.status === 413 && !isJson;
+    const unavailable = response.status === 503 && !isJson;
     const failure = new ApiError(
       response.status,
-      err?.code ?? (tooLarge ? 'payload_too_large' : 'internal_error'),
+      err?.code ?? (tooLarge ? 'payload_too_large' : unavailable ? 'service_unavailable' : 'internal_error'),
       err?.message ??
         (tooLarge
           ? 'El archivo o el texto es demasiado grande. Reduce el tamaño e inténtalo de nuevo.'
-          : `La API respondió ${response.status}.`),
+          : unavailable
+            ? 'El servicio de análisis (IMAP o ClamAV) no responde. Inténtalo de nuevo en unos minutos.'
+            : `La API respondió ${response.status}.`),
       err?.requestId,
       err?.details,
       { cause: new Error(`Respuesta ${response.status} (${contentType || 'sin content-type'})`) },
@@ -179,6 +183,8 @@ export const api = {
     request<FindingList>(`/reports/${segment(id)}/findings`),
   listAttachments: (id: string) =>
     request<AttachmentList>(`/reports/${segment(id)}/attachments`),
+  getReportDocument: (id: string) =>
+    request<ReportDocument>(`/reports/${segment(id)}/report`),
   getReportText: (id: string) =>
     request<string>(`/reports/${segment(id)}/text`, { accept: 'text/plain' }),
   reportHtmlUrl: (id: string) => `${API_BASE}/reports/${segment(id)}/html`,

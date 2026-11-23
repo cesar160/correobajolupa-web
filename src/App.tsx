@@ -8,6 +8,7 @@ import { LoginPage } from './pages/LoginPage';
 import { NewReportPage } from './pages/NewReportPage';
 import { RegisterPage } from './pages/RegisterPage';
 import { ReportDetailPage } from './pages/ReportDetailPage';
+import { ReportDocumentPage } from './pages/ReportDocumentPage';
 import { ReportsPage } from './pages/ReportsPage';
 import { UsersPage } from './pages/UsersPage';
 
@@ -57,6 +58,7 @@ function AnimatedRoutes() {
         <Route path="/panel" element={<DashboardPage />} />
         <Route path="/reports" element={<ReportsPage />} />
         <Route path="/reports/new" element={<NewReportPage />} />
+        <Route path="/reports/:id/informe" element={<ReportDocumentPage />} />
         <Route path="/reports/:id" element={<ReportDetailPage />} />
         <Route
           path="/users"
