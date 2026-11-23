@@ -45,6 +45,14 @@ export function ErrorBox({ message }: { message: string }) {
   );
 }
 
+export function Notice({ message }: { message: string }) {
+  return (
+    <p className="notice" role="status">
+      <Icon as={CircleCheck} size={16} /> {message}
+    </p>
+  );
+}
+
 export function EmptyState({ children }: { children: ReactNode }) {
   return (
     <div className="empty-state">
