@@ -4,6 +4,13 @@
 **Formato:** 1920×1080, 30 fps, voz en español + subtítulos.
 **Regla de oro:** usar solo **datos sintéticos**. Nada de correos, nombres ni contraseñas reales.
 
+> **Nota para grabar con la API real:** hoy el back sirve M0–M6. Las rutas de **M7**
+> (`/audit`, `/incidents/{id}/actions`, `/incidents/{id}/quarantine`, `/actions/{id}/restore`)
+> devuelven **404**. Por eso, con API real **omite el bloque de auditoría (3:35–4:00)** del
+> guion y cierra en el incidente. Si quieres mostrar cuarentena/auditoría, espera a que M7
+> esté integrado o graba ese tramo con el servidor simulado, aclarando en el video que es una
+> simulación.
+
 ---
 
 ## 1. Checklist antes de grabar
@@ -110,17 +117,19 @@
 
 ---
 
-### 3:35 – 4:00 · Auditoría y cierre
+### 3:35 – 4:00 · Cierre (versión API real)
 
 **Acciones:**
-1. Sidebar → **Auditoría**. Muestra 2 eventos (success y denied).
-2. Vuelve al Panel principal.
-3. Deja el título final en pantalla 3 segundos.
+1. Desde el incidente, vuelve al **Panel principal**.
+2. Deja el título final en pantalla 3 segundos.
 
 **Di:**
-> "Todas las acciones quedan en la auditoría, sin asuntos ni direcciones completas. Con esto cerramos: análisis explicable, contenido aislado y respuestas reversibles. Gracias."
+> "Con esto cerramos: análisis explicable, contenido aislado y correlación de indicadores en un incidente. La cuarentena y la auditoría quedan como siguiente etapa del proyecto. Gracias."
 
 **Texto en pantalla:** `CorreoBajoLupa · Proyecto académico de Seguridad Informática`
+
+> Si M7 ya está integrado, recupera el bloque original: Sidebar → **Auditoría**, muestra los
+> eventos y di: *"Todas las acciones quedan registradas, sin asuntos ni direcciones completas"*.
 
 ---
 
