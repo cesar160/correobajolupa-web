@@ -40,17 +40,25 @@ git clone -c core.autocrlf=false https://github.com/cesar160/correobajolupa-web.
 - [ ] `POSTGRES_PASSWORD`, `IMAP_LAB_PASSWORD` y `FIRST_ADMIN_PASSWORD` con >= 12 caracteres
       (el bloque 5 debe imprimir `3`).
 - [ ] `FIRST_ADMIN_EMAIL=admin@ejemplo.invalid`.
-- [ ] **Anotar la contraseña del admin** que imprime el bloque 4, en un lugar privado.
+- [ ] **Anotar la contraseña del admin** que imprime el bloque 4, en un lugar privado y pasársela
+      por un canal privado (no chat ni documento compartido). Si se pierde:
+      `grep '^FIRST_ADMIN_PASSWORD=' .env` en el servidor.
 - [ ] `INSTITUTIONAL_DOMAINS=universidad-ejemplo.example` (configura la regla R3).
-- [x] **TRUST_PROXY_HOPS=2** confirmado por la guía PDF (Bloque 4): dos proxys (Caddy + nginx).
-      El README local dice `1` solo para el caso sin Caddy. Nunca `true`.
+- [x] **TRUST_PROXY_HOPS=2** confirmado por la guía PDF y por el dueño de la API: dos saltos
+      (Caddy → nginx → API). Con `1` la API vería la IP de Caddy y los límites se aplicarían a
+      todos juntos; `true` lo rechaza la propia API (se podría falsificar `X-Forwarded-For`).
+      El README local dice `1` solo para la pila local (un salto). El Bloque 5 debe imprimir
+      `TRUST_PROXY_HOPS=2`. Pendiente de comprobar con login desde fuera una vez arriba.
 - [ ] `COOKIE_SECURE=true` (por defecto en el Compose de producción) + HTTPS de Caddy.
 
 ## 5. Caddy y HTTPS (bloques 6 y 7)
 
 - [ ] IP elástica Asignada a la instancia (bloque 3, sin espacios alrededor de `=`).
 - [ ] `$HOST` resuelve (`<IP-con-guiones>.sslip.io`).
-- [ ] Grupos de seguridad: **80 y 443 abiertos** al público; 3000 y 8080 **no** publicados.
+- [ ] Grupos de seguridad: solo **22, 80 y 443** abiertos. No hace falta "cerrar a mano" 3000
+      ni 8080: nunca se abren en el security group, y el Compose publica API/front solo en
+      `127.0.0.1` del servidor. Solo Caddy expone puertos al exterior.
+- [ ] En Elastic IPs, el campo **Associated instance** debe mostrar `correobajolupa`.
 - [ ] `Caddyfile` apunta a `web:80` (mismo nombre de servicio del Compose).
 - [ ] `compose.https.yaml` monta `./Caddyfile` y el volumen `caddy-data`.
 
