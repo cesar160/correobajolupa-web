@@ -25,7 +25,7 @@
 
 ### Datos de prueba (sintéticos)
 - [ ] Cuenta: `cesar.toledo@ejemplo.invalid` / contraseña de prueba larga.
-- [ ] 1–2 reportes completados con hallazgos y enlace desactivado.
+- [ ] Archivo `C1-combinado-reglas-1-2-5.eml` copiado al escritorio como `becas-institucionales.eml`.
 - [ ] 1 indicador confirmado con al menos 1 candidato.
 - [ ] 1 incidente en estado `analyzing`.
 - [ ] Opcional (si el back ya tiene M7): 1 acción de cuarentena + 2 eventos de auditoría.
@@ -66,17 +66,22 @@
 
 ### 0:50 – 1:25 · Enviar un correo a análisis
 
+**Archivo a usar (sintético):**
+`correobajolupa-api/test/fixtures/emails/C1-combinado-reglas-1-2-5.eml`
+Cópialo antes a un lugar visible del escritorio, por ejemplo `becas-institucionales.eml`.
+
 **Acciones:**
 1. Click en **Analizar correo** en el sidebar.
 2. Muestra las dos opciones: **Subir archivo .eml** y **Pegar mensaje original**.
-3. Selecciona el archivo `.eml` de prueba.
-4. Click en **Analizar correo ↗**.
-5. Espera en el detalle hasta que el estado pase a **Completado**.
+3. En la pestaña **Subir archivo .eml**, click en **Explorar archivos** y selecciona el `.eml`.
+4. Espera a que aparezca la fila del archivo con el check de "archivo listo".
+5. Click en **Analizar correo ↗**.
+6. El front navega al detalle del reporte nuevo con estado **En cola**; espera a que pase a **Completado** (el polling actualiza solo).
 
 **Di:**
-> "Podemos subir el mensaje original o pegar su texto. El análisis es asíncrono: al enviar queda en cola y esta misma pantalla se actualiza sola cuando termina. No visitamos ningún enlace del correo."
+> "Vamos a subir el mensaje original, un archivo `.eml` sintético. También podríamos pegar el texto, pero el archivo conserva los encabezados y da más evidencia. El análisis es asíncrono: al enviar queda en cola y esta pantalla se actualiza sola cuando termina. En ningún momento visitamos los enlaces del correo."
 
-**Consejo:** si la espera es larga, acelera ese tramo en la edición.
+**Consejo:** la espera suele ser de pocos segundos; si se alarga, acelera ese tramo en la edición. Sigue usando **este reporte recién creado** para los bloques de hallazgos, informe e incidente, para que el video tenga continuidad.
 
 ---
 
