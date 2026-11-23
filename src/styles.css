@@ -1009,6 +1009,23 @@ textarea {
   inline-size: 100%;
 }
 
+/* Chevron propio con separación del borde, sin abandonar el <select> nativo. */
+select {
+  appearance: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%231d1d1f' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 1rem center;
+  padding-inline-end: 2.75rem;
+}
+
+@media (forced-colors: active) {
+  select {
+    appearance: auto;
+    background-image: none;
+    padding-inline-end: 1.125rem;
+  }
+}
+
 textarea {
   border-radius: 20px;
   resize: vertical;
