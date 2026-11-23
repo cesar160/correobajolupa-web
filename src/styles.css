@@ -787,6 +787,75 @@ a {
   color: var(--color-slate);
 }
 
+.incidents-table {
+  --label-2: 'Estado';
+  --label-3: 'Reportes';
+  --label-4: 'Indicadores';
+  --label-5: 'Actualizado';
+  --label-6: 'Ver';
+}
+
+.badge-incident-analyzing,
+.badge-incident-contained,
+.badge-incident-received {
+  background: var(--color-accent);
+  color: #fff;
+}
+
+.badge-incident-closed,
+.badge-incident-false_positive {
+  background: var(--color-canvas);
+  color: var(--color-slate);
+}
+
+.assoc-list,
+.comment-list {
+  list-style: none;
+  margin: 1rem 0 0;
+  padding: 0;
+  display: grid;
+  gap: 0.5rem;
+}
+
+.assoc-list li,
+.comment-list li {
+  display: flex;
+  align-items: center;
+  gap: 0.85rem;
+  flex-wrap: wrap;
+  padding: 0.85rem 1rem;
+  border-radius: 16px;
+  background: var(--color-frost);
+  font-size: 0.875rem;
+}
+
+.assoc-list li > .row-action {
+  margin-inline-start: auto;
+}
+
+.comment-form {
+  display: grid;
+  justify-items: end;
+  gap: 0.75rem;
+  margin-block-start: 1rem;
+}
+
+.comment-form textarea {
+  inline-size: 100%;
+}
+
+.comment-head {
+  display: flex;
+  align-items: baseline;
+  gap: 0.75rem;
+  flex-wrap: wrap;
+}
+
+.comment-list li {
+  display: grid;
+  gap: 0.4rem;
+}
+
 .badge-indicator-confirmed,
 .badge-source-manual {
   background: var(--color-accent);

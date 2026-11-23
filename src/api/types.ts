@@ -232,6 +232,33 @@ export interface MessageDetail extends MessageSummary {
   authentication: { spf: AuthResult; dkim: AuthResult; dmarc: AuthResult } | null;
 }
 
+export type IncidentStatus = 'received' | 'analyzing' | 'contained' | 'closed' | 'false_positive';
+
+export interface Comment {
+  id: string;
+  author: { id: string; displayName: string };
+  body: string;
+  createdAt: string;
+}
+
+export interface IncidentSummary {
+  id: string;
+  title: string;
+  status: IncidentStatus;
+  reportsCount: number;
+  indicatorsCount: number;
+  createdBy: { id: string; displayName: string };
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface IncidentDetail extends IncidentSummary {
+  description: string | null;
+  reports: ReportSummary[];
+  indicators: Indicator[];
+  comments: Comment[];
+}
+
 export interface SyncResult {
   mailboxId: string;
   fetched: number;

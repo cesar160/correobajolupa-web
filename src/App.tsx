@@ -6,6 +6,8 @@ import { Layout } from './components/Layout';
 import { CandidatesPage } from './pages/CandidatesPage';
 import { DashboardPage } from './pages/DashboardPage';
 import { ExclusionsPage } from './pages/ExclusionsPage';
+import { IncidentDetailPage } from './pages/IncidentDetailPage';
+import { IncidentsPage } from './pages/IncidentsPage';
 import { IndicatorsPage } from './pages/IndicatorsPage';
 import { MailboxesPage } from './pages/MailboxesPage';
 import { MessageDetailPage } from './pages/MessageDetailPage';
@@ -72,6 +74,8 @@ function AnimatedRoutes() {
         <Route path="/mailboxes" element={<MailboxesPage />} />
         <Route path="/messages" element={<MessagesPage />} />
         <Route path="/messages/:id" element={<MessageDetailPage />} />
+        <Route path="/incidents" element={<IncidentsPage />} />
+        <Route path="/incidents/:id" element={<IncidentDetailPage />} />
         <Route
           path="/users"
           element={

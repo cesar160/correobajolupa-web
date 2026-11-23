@@ -5,6 +5,10 @@ import type {
   Exclusion,
   Indicator,
   IndicatorStatus,
+  Comment,
+  IncidentDetail,
+  IncidentStatus,
+  IncidentSummary,
   IndicatorType,
   Mailbox,
   MessageDetail,
@@ -225,6 +229,24 @@ export const api = {
   listMessages: (params: { mailboxId?: string; location?: MessageLocation | ''; page?: number; pageSize?: number } = {}) =>
     request<Paginated<MessageSummary>>(`/messages${query(params)}`),
   getMessage: (id: string) => request<MessageDetail>(`/messages/${segment(id)}`),
+
+  listIncidents: (params: { status?: IncidentStatus | ''; page?: number; pageSize?: number } = {}) =>
+    request<Paginated<IncidentSummary>>(`/incidents${query(params)}`),
+  createIncident: (body: { title: string; description?: string }) =>
+    request<IncidentDetail>('/incidents', { method: 'POST', json: body }),
+  getIncident: (id: string) => request<IncidentDetail>(`/incidents/${segment(id)}`),
+  updateIncident: (id: string, body: { title?: string; description?: string; status?: IncidentStatus }) =>
+    request<IncidentDetail>(`/incidents/${segment(id)}`, { method: 'PATCH', json: body }),
+  addIncidentReport: (id: string, reportId: string) =>
+    request<IncidentDetail>(`/incidents/${segment(id)}/reports`, { method: 'POST', json: { reportId } }),
+  removeIncidentReport: (id: string, reportId: string) =>
+    request<void>(`/incidents/${segment(id)}/reports/${segment(reportId)}`, { method: 'DELETE' }),
+  addIncidentIndicator: (id: string, indicatorId: string) =>
+    request<IncidentDetail>(`/incidents/${segment(id)}/indicators`, { method: 'POST', json: { indicatorId } }),
+  removeIncidentIndicator: (id: string, indicatorId: string) =>
+    request<void>(`/incidents/${segment(id)}/indicators/${segment(indicatorId)}`, { method: 'DELETE' }),
+  addComment: (id: string, body: string) =>
+    request<Comment>(`/incidents/${segment(id)}/comments`, { method: 'POST', json: { body } }),
   getReportText: (id: string) =>
     request<string>(`/reports/${segment(id)}/text`, { accept: 'text/plain' }),
   reportHtmlUrl: (id: string) => `${API_BASE}/reports/${segment(id)}/html`,

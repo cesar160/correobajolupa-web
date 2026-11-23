@@ -9,6 +9,7 @@ import {
   Mail,
   Menu,
   PlusCircle,
+  ShieldAlert,
   Users,
 } from 'lucide-react';
 import { NavLink, Outlet, useLocation, useNavigate } from 'react-router-dom';
@@ -26,6 +27,7 @@ const TITLES: Record<string, string> = {
   '/exclusions': 'Exclusiones | CorreoBajoLupa',
   '/mailboxes': 'Buzones | CorreoBajoLupa',
   '/messages': 'Mensajes | CorreoBajoLupa',
+  '/incidents': 'Incidentes | CorreoBajoLupa',
 };
 
 const ROLE_LABEL = {
@@ -133,6 +135,9 @@ export function Layout() {
               </NavLink>
               <NavLink to="/messages">
                 <Icon as={Mail} /> Mensajes
+              </NavLink>
+              <NavLink to="/incidents">
+                <Icon as={ShieldAlert} /> Incidentes
               </NavLink>
               <NavLink to="/exclusions">
                 <Icon as={Ban} /> Exclusiones
