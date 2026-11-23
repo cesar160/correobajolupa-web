@@ -2289,6 +2289,15 @@ export interface operations {
                     "application/json": components["schemas"]["ErrorResponse"];
                 };
             };
+            /** @description Ya hay una sincronización o una entrega simulada de ese buzón en curso (`conflict`). */
+            409: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
             /** @description El servidor IMAP del laboratorio o ClamAV no responden (`service_unavailable`). */
             503: {
                 headers: {
