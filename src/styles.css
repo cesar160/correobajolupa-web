@@ -3125,3 +3125,151 @@ dialog p {
     grid-template-columns: minmax(0, 1fr);
   }
 }
+
+/* Incidente: estado con paso a paso y siguiente paso */
+.incident-hero {
+  display: grid;
+  gap: 1.25rem;
+  margin-block-end: 1.25rem;
+}
+
+.incident-hero-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+
+.stepper {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.stepper li {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  min-block-size: 2.25rem;
+  padding: 0.25rem 1rem 0.25rem 0.35rem;
+  border-radius: var(--radius-control);
+  background: var(--color-frost);
+  color: var(--color-slate);
+  font-size: 0.875rem;
+  font-weight: 600;
+}
+
+.stepper-mark {
+  inline-size: 1.75rem;
+  block-size: 1.75rem;
+  display: grid;
+  place-items: center;
+  border-radius: var(--radius-control);
+  background: var(--color-surface);
+  box-shadow: inset 0 0 0 1px var(--color-steel);
+  font-size: 0.75rem;
+  font-weight: 800;
+}
+
+.stepper li.is-done {
+  color: var(--color-ink);
+}
+
+.stepper li.is-done .stepper-mark {
+  background: var(--color-ink);
+  color: #fff;
+  box-shadow: none;
+}
+
+.stepper li.is-current {
+  background: var(--color-ink);
+  color: #fff;
+}
+
+.stepper li.is-current .stepper-mark {
+  background: var(--color-lime);
+  color: var(--color-lime-ink);
+  box-shadow: none;
+}
+
+.next-step-box {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  flex-wrap: wrap;
+  padding: 1rem 1.25rem;
+  border-radius: var(--radius-row);
+  background: var(--color-frost);
+}
+
+.next-step-box > div:first-child {
+  flex: 1 1 20rem;
+  min-inline-size: 0;
+}
+
+.next-step-actions {
+  display: flex;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+}
+
+/* Línea de tiempo */
+.timeline {
+  list-style: none;
+  margin: 1.25rem 0 0;
+  padding: 0;
+  display: grid;
+}
+
+.timeline > li {
+  position: relative;
+  display: grid;
+  grid-template-columns: 2.25rem minmax(0, 1fr);
+  gap: 0.875rem;
+  padding-block-end: 1.25rem;
+}
+
+.timeline > li::before {
+  content: '';
+  position: absolute;
+  inset-inline-start: calc(1.125rem - 1px);
+  inset-block: 2.25rem 0;
+  inline-size: 2px;
+  background: var(--color-hairline);
+}
+
+.timeline > li:last-child {
+  padding-block-end: 0;
+}
+
+.timeline > li:last-child::before {
+  display: none;
+}
+
+.timeline-mark {
+  inline-size: 2.25rem;
+  block-size: 2.25rem;
+  display: grid;
+  place-items: center;
+  border-radius: var(--radius-control);
+  background: var(--color-frost);
+}
+
+.timeline-title {
+  font-weight: 700;
+  padding-block-start: 0.35rem;
+}
+
+.timeline-body {
+  margin-block-start: 0.5rem;
+  padding: 0.75rem 1rem;
+  border-radius: var(--radius-row);
+  background: var(--color-frost);
+  font-size: 0.9375rem;
+  overflow-wrap: anywhere;
+}
