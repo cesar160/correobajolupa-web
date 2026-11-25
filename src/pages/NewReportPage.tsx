@@ -70,6 +70,16 @@ export function NewReportPage() {
 
       <ErrorBox message={error} />
 
+      <section className="card">
+        <h2>Privacidad del análisis</h2>
+        <p className="hint">
+          El reporte se conserva hasta 7 días. Si la consulta externa de reputación está habilitada,
+          se puede enviar a VirusTotal una URL normalizada sin parámetros ni fragmento, pero su ruta
+          aún podría contener información sensible. No se envían el asunto, el cuerpo ni los nombres
+          de los adjuntos a esa fuente. Los enlaces del correo no se visitan.
+        </p>
+      </section>
+
       <div className="analyze-stepbar">
         <Tabs
           label="Formas de enviar un correo"

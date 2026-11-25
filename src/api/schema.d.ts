@@ -871,6 +871,7 @@ export interface components {
                 /** @enum {string} */
                 dmarc: "pass" | "fail" | "none" | "unknown";
             } | null;
+            reputation: components["schemas"]["ReputationReview"];
         };
         /** @enum {string} */
         LimitedReason: "missing_headers" | "parse_error";
@@ -881,6 +882,20 @@ export interface components {
             defangedUrl: string;
             /** @description Dominio o IP del destino, desactivado (por ejemplo `dominio[.]com`, D-017). */
             domain: string | null;
+        };
+        /** @description Solo informa sobre reputación existente; sin datos o fallo no significa seguro. */
+        ReputationReview: {
+            /** @enum {string} */
+            status: "not_configured" | "checked" | "unavailable";
+            items: {
+                /** @description URL desactivada: nunca clicable. */
+                displayUrl: string;
+                /** @enum {string} */
+                state: "reported" | "suspicious" | "no_detections" | "no_data" | "error" | "not_checked";
+                malicious: number | null;
+                total: number | null;
+                analyzedAt: string | null;
+            }[];
         };
         FindingList: {
             items: components["schemas"]["Finding"][];
@@ -899,10 +914,10 @@ export interface components {
             createdAt: string;
         };
         /**
-         * @description R1 Reply-To distinto; R2 texto del enlace distinto del destino; R3 dominio parecido a uno institucional; R4 dominio internacionalizado; R5 destino como IP; R6 esquema de URL no permitido; R7 doble extensión o tipo de adjunto inconsistente; R8 indicador confirmado.
+         * @description R1 Reply-To distinto; R2 texto del enlace distinto del destino; R3 dominio parecido a uno institucional; R4 dominio internacionalizado; R5 destino como IP; R6 esquema de URL no permitido; R7 doble extensión o tipo de adjunto inconsistente; R8 indicador confirmado; R9 señales en la forma de una URL; R10 URL reportada en una lista de reputación.
          * @enum {string}
          */
-        RuleId: "R1" | "R2" | "R3" | "R4" | "R5" | "R6" | "R7" | "R8";
+        RuleId: "R1" | "R2" | "R3" | "R4" | "R5" | "R6" | "R7" | "R8" | "R9" | "R10";
         EvidenceItem: {
             label: string;
             /** @description Los enlaces y dominios aparecen desactivados (D-017). */
@@ -949,6 +964,7 @@ export interface components {
                 text: string;
             };
             findings: components["schemas"]["GuideFinding"][];
+            reputation: components["schemas"]["ReputationReview"];
             /** @description Desactivados (D-017). */
             indicators: {
                 type: components["schemas"]["IndicatorType"];
@@ -981,7 +997,7 @@ export interface components {
          * @description `no_findings` dice que sin hallazgos no significa seguro. `failed` dice que el análisis no terminó (D-004).
          * @enum {string}
          */
-        ReportNoteKind: "limited" | "no_findings" | "failed" | "auth_informative";
+        ReportNoteKind: "limited" | "no_findings" | "failed" | "auth_informative" | "feed_unavailable" | "reputation_unavailable";
         MailboxList: {
             items: components["schemas"]["Mailbox"][];
         };
@@ -3168,7 +3184,7 @@ export interface operations {
                     "application/json": components["schemas"]["ErrorResponse"];
                 };
             };
-            /** @description El reporte ya está asociado (`conflict`). */
+            /** @description El reporte ya está asociado, o el incidente ya es final (`conflict`). */
             409: {
                 headers: {
                     [name: string]: unknown;
@@ -3221,6 +3237,15 @@ export interface operations {
             };
             /** @description El incidente no existe o el reporte no está asociado (`not_found`). */
             404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+            /** @description El incidente ya es final: no se le pueden quitar reportes (`conflict`). */
+            409: {
                 headers: {
                     [name: string]: unknown;
                 };
@@ -3293,7 +3318,7 @@ export interface operations {
                     "application/json": components["schemas"]["ErrorResponse"];
                 };
             };
-            /** @description El indicador ya está asociado (`conflict`). */
+            /** @description El indicador ya está asociado, o el incidente ya es final (`conflict`). */
             409: {
                 headers: {
                     [name: string]: unknown;
@@ -3346,6 +3371,15 @@ export interface operations {
             };
             /** @description El incidente no existe o el indicador no está asociado (`not_found`). */
             404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+            /** @description El incidente ya es final: no se le pueden quitar indicadores (`conflict`). */
+            409: {
                 headers: {
                     [name: string]: unknown;
                 };

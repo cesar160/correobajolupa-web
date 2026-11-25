@@ -5,6 +5,7 @@ import { ApiError, api, errorMessage } from '../api/client';
 import type { Attachment, Finding, ReportDetail } from '../api/types';
 import { ConfirmDialog } from '../components/ConfirmDialog';
 import { Icon } from '../components/Icon';
+import { ReputationPanel } from '../components/ReputationPanel';
 import {
   AuthBadge,
   EmptyState,
@@ -212,6 +213,8 @@ export function ReportDetailPage() {
           <p className="hint">Nunca suma puntaje: puede estar alterada en un .eml subido.</p>
         </div>
       )}
+
+      {!analyzing && report.status !== 'failed' && <ReputationPanel review={report.reputation} />}
 
       <Tabs
         label="Secciones del reporte"

@@ -1,4 +1,4 @@
-// Tipos generados desde contract/openapi.json v0.3.0 (repo correobajolupa-api).
+// Tipos generados desde contract/openapi.json v0.4.0 (repo correobajolupa-api).
 // Regenerar con:
 //   npx openapi-typescript ../correobajolupa-api/contract/openapi.json -o src/api/schema.d.ts
 // Los alias de abajo mantienen los nombres que ya usa el front.
@@ -27,6 +27,7 @@ export type ReportSummary = Schemas['ReportSummary'];
 export type ReportList = Schemas['ReportList'];
 export type Authentication = NonNullable<Schemas['ReportDetail']['authentication']>;
 export type ReportDetail = Schemas['ReportDetail'];
+export type ReputationReview = Schemas['ReputationReview'];
 export type RuleId = Schemas['RuleId'];
 export type EvidenceItem = Schemas['EvidenceItem'];
 export type Finding = Schemas['Finding'];
@@ -38,7 +39,7 @@ export type Attachment = Schemas['Attachment'];
 export type AttachmentList = Schemas['AttachmentList'];
 
 export type IndicatorType = Schemas['IndicatorType'];
-export type NoteKind = 'limited' | 'no_findings' | 'failed' | 'auth_informative';
+export type NoteKind = Schemas['ReportNoteKind'];
 export type GuideFinding = Schemas['GuideFinding'];
 export type ReportDocument = Schemas['ReportDocument'];
 
