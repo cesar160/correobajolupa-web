@@ -3,6 +3,7 @@ import {
   Ban,
   ClipboardList,
   Fingerprint,
+  House,
   Inbox,
   LayoutDashboard,
   LogOut,
@@ -10,6 +11,7 @@ import {
   Menu,
   PlusCircle,
   ScrollText,
+  Search,
   ShieldAlert,
   Users,
 } from 'lucide-react';
@@ -36,6 +38,12 @@ const ROLE_LABEL = {
   reporter: 'Reportante',
   analyst: 'Analista',
   admin: 'Administrador',
+} as const;
+
+const SPACE_LABEL = {
+  reporter: 'Espacio de reportante',
+  analyst: 'Espacio de análisis',
+  admin: 'Administración',
 } as const;
 
 export function Layout() {
@@ -93,9 +101,12 @@ export function Layout() {
       <aside className="sidebar">
         <div className="sidebar-brand">
           <NavLink to="/panel" className="brand">
+            <span className="brand-mark" aria-hidden="true">
+              <Icon as={Search} size={18} />
+            </span>
             CorreoBajoLupa
           </NavLink>
-          <span className="sidebar-eyebrow">ESPACIO DE REPORTANTE</span>
+          <span className="sidebar-eyebrow">{SPACE_LABEL[user?.role ?? 'reporter']}</span>
         </div>
 
         <button
@@ -118,34 +129,49 @@ export function Layout() {
             if ((event.target as HTMLElement).closest('a')) closeMenu();
           }}
         >
-          <NavLink to="/panel" end>
-            <Icon as={LayoutDashboard} /> Panel principal
-          </NavLink>
-          <NavLink to="/reports/new">
-            <Icon as={PlusCircle} /> Analizar correo
-          </NavLink>
-          <NavLink to="/reports" end>
-            <Icon as={ClipboardList} /> Mis reportes
-          </NavLink>
-          <NavLink to="/indicators">
-            <Icon as={Fingerprint} /> Indicadores
-          </NavLink>
-          {hasRole('analyst', 'admin') && (
+          {hasRole('analyst', 'admin') ? (
             <>
+              <NavLink to="/panel" end>
+                <Icon as={LayoutDashboard} /> Panel
+              </NavLink>
+              <NavLink to="/reports" end>
+                <Icon as={ClipboardList} /> Reportes
+              </NavLink>
+              <NavLink to="/incidents">
+                <Icon as={ShieldAlert} /> Incidentes
+              </NavLink>
+              <NavLink to="/indicators">
+                <Icon as={Fingerprint} /> Indicadores
+              </NavLink>
               <NavLink to="/mailboxes">
                 <Icon as={Inbox} /> Buzones
               </NavLink>
               <NavLink to="/messages">
                 <Icon as={Mail} /> Mensajes
               </NavLink>
-              <NavLink to="/incidents">
-                <Icon as={ShieldAlert} /> Incidentes
+              <NavLink to="/exclusions">
+                <Icon as={Ban} /> Exclusiones
               </NavLink>
               <NavLink to="/audit">
                 <Icon as={ScrollText} /> Auditoría
               </NavLink>
-              <NavLink to="/exclusions">
-                <Icon as={Ban} /> Exclusiones
+              <NavLink to="/reports/new">
+                <Icon as={PlusCircle} /> Analizar correo
+              </NavLink>
+            </>
+          ) : (
+            <>
+              <NavLink to="/panel" end>
+                <Icon as={House} /> Inicio
+              </NavLink>
+              <NavLink to="/reports" end>
+                <Icon as={ClipboardList} /> Mis reportes
+              </NavLink>
+              <NavLink to="/reports/new">
+                <Icon as={PlusCircle} /> Nuevo reporte
+              </NavLink>
+              <NavLink to="/indicators">
+                <Icon as={Fingerprint} /> Indicadores
               </NavLink>
             </>
           )}

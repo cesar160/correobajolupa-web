@@ -2989,3 +2989,21 @@ dialog p {
     padding-inline-start: 1rem;
   }
 }
+
+/* Marca: lupa sobre cuadrado oscuro */
+.brand {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.6rem;
+}
+
+.brand-mark {
+  inline-size: 2.25rem;
+  block-size: 2.25rem;
+  display: grid;
+  place-items: center;
+  border-radius: 12px;
+  background: var(--color-ink);
+  color: var(--color-lime);
+  flex: none;
+}
