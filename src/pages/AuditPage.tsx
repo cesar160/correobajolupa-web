@@ -6,6 +6,12 @@ import { ErrorBox, formatDate, PageHeader } from '../components/ui';
 
 const PAGE_SIZE = 20;
 
+const RESULT_LABEL: Record<AuditEvent['result'], string> = {
+  success: 'Éxito',
+  failure: 'Falló',
+  denied: 'Denegado',
+};
+
 export function AuditPage() {
   const [items, setItems] = useState<AuditEvent[]>([]);
   const [page, setPage] = useState(1);
@@ -86,7 +92,7 @@ export function AuditPage() {
                   <tr key={event.id}>
                     <td>{formatDate(event.at)}</td>
                     <th scope="row" className="mono">{event.action}</th>
-                    <td><span className={`badge badge-audit-${event.result}`}>{event.result}</span></td>
+                    <td><span className={`badge badge-audit-${event.result}`}>{RESULT_LABEL[event.result]}</span></td>
                     <td>{event.actor?.displayName ?? 'Sistema'}</td>
                     <td>
                       {event.targetType ?? '—'}
