@@ -3,6 +3,7 @@ import { Link, useParams } from 'react-router-dom';
 import { ApiError, api, errorMessage } from '../api/client';
 import type { IndicatorType, ReportDocument } from '../api/types';
 import { ErrorBox, formatDate, Loading, PageHeader, PriorityBadge, ScanBadge, StatusBadge } from '../components/ui';
+import { ReputationPanel } from '../components/ReputationPanel';
 
 const INDICATOR_LABEL: Record<IndicatorType, string> = {
   domain: 'Dominio',
@@ -83,6 +84,8 @@ export function ReportDocumentPage() {
         </p>
       ))}
 
+      {doc.status !== 'failed' && <ReputationPanel review={doc.reputation} />}
+
       <div className="doc-grid">
         <section className="card">
           <h2>Cómo protegerte</h2>
@@ -138,8 +141,8 @@ export function ReportDocumentPage() {
           <p className="notice">No se registraron hallazgos con las reglas actuales.</p>
         ) : (
           <div className="doc-finding-grid">
-            {doc.findings.map((finding) => (
-              <article className="card guide-card" key={finding.ruleId}>
+            {doc.findings.map((finding, index) => (
+              <article className="card guide-card" key={`${finding.ruleId}-${index}`}>
                 <h3>
                   <span className="rule-id">{finding.ruleId}</span> {finding.title}
                 </h3>
