@@ -3007,3 +3007,121 @@ dialog p {
   color: var(--color-lime);
   flex: none;
 }
+
+/* Panel: último reporte, resultados y consejos */
+.dash-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1.4fr) minmax(0, 1fr);
+  gap: 1.25rem;
+  margin-block-end: 1.25rem;
+  align-items: stretch;
+}
+
+.dash-grid > .card {
+  margin: 0;
+}
+
+.dash-latest,
+.dash-results,
+.dash-tips {
+  display: grid;
+  gap: 1rem;
+  align-content: start;
+  justify-items: start;
+}
+
+.dash-latest-subject {
+  font-size: 1.1875rem;
+  font-weight: 700;
+  line-height: 1.35;
+}
+
+.dash-results {
+  justify-items: stretch;
+}
+
+.stack-bar {
+  display: flex;
+  gap: 4px;
+  block-size: 1.125rem;
+}
+
+.stack-bar > span {
+  border-radius: var(--radius-control);
+  min-inline-size: 1.5rem;
+}
+
+.stack-bar-high { background: var(--prio-high); }
+.stack-bar-medium { background: var(--prio-medium); }
+.stack-bar-low { background: var(--prio-low); }
+.stack-bar-none {
+  background: var(--color-frost);
+  box-shadow: inset 0 0 0 1px var(--color-steel);
+}
+
+.stack-legend,
+.recent-list,
+.dash-tips ul {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  gap: 0.6rem;
+}
+
+.stack-legend li {
+  display: grid;
+  grid-template-columns: 0.875rem minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 0.75rem;
+  font-size: 0.875rem;
+}
+
+.stack-swatch {
+  inline-size: 0.875rem;
+  block-size: 0.875rem;
+  border-radius: 5px;
+}
+
+.recent-list li {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  flex-wrap: wrap;
+  padding: 0.875rem 1rem;
+  border-radius: var(--radius-row);
+  background: var(--color-frost);
+}
+
+.recent-list-text {
+  display: grid;
+  min-inline-size: 0;
+}
+
+.recent-list-text a {
+  font-weight: 700;
+  text-decoration: none;
+}
+
+.recent-list-text a:hover {
+  text-decoration: underline;
+}
+
+.dash-tips li {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  gap: 0.875rem;
+  align-items: start;
+}
+
+.dash-tips strong {
+  display: block;
+  font-size: 0.9375rem;
+}
+
+@media (max-width: 70rem) {
+  .dash-grid {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
