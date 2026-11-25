@@ -6,8 +6,6 @@ import {
   type ReactNode,
 } from 'react';
 import {
-  ArrowDown,
-  ArrowUp,
   Check,
   CircleAlert,
   CircleCheck,
@@ -143,7 +141,7 @@ const STATUS_LABEL: Record<ReportStatus, string> = {
   processing: 'Analizando',
   completed: 'Completado',
   limited: 'Limitado',
-  failed: 'Fallido',
+  failed: 'Falló',
 };
 
 const STATUS_ICON: Record<ReportStatus, LucideIcon> = {
@@ -186,20 +184,39 @@ const PRIORITY_LABEL: Record<Priority, string> = {
   high: 'Alta',
 };
 
-const PRIORITY_ICON: Record<Priority, LucideIcon> = {
-  high: ArrowUp,
-  medium: Minus,
-  low: ArrowDown,
-};
+const PRIORITY_BARS: Record<Priority, number> = { high: 3, medium: 2, low: 1 };
 
-export function PriorityBadge({ priority }: { priority: Priority | null }) {
-  if (!priority) return <span className="muted">—</span>;
+/**
+ * Prioridad con texto y barras (3, 2, 1): se entiende aunque no se distingan
+ * los colores. `full` escribe "Prioridad alta" y `large` la agranda.
+ */
+export function PriorityBadge({
+  priority,
+  full = false,
+  large = false,
+}: {
+  priority: Priority | null;
+  full?: boolean;
+  large?: boolean;
+}) {
+  if (!priority) return <span className="muted">Sin prioridad</span>;
+  const label = full ? `Prioridad ${PRIORITY_LABEL[priority].toLowerCase()}` : PRIORITY_LABEL[priority];
   return (
-    <span className={`badge badge-priority badge-${priority}`}>
-      <span className="badge-mark">
-        <Icon as={PRIORITY_ICON[priority]} size={13} />
-      </span>
-      {PRIORITY_LABEL[priority]}
+    <span className={`badge badge-priority badge-${priority}${large ? ' badge-large' : ''}`}>
+      <svg className="priority-bars" viewBox="0 0 16 14" aria-hidden="true" focusable="false">
+        {[0, 1, 2].map((index) => (
+          <rect
+            key={index}
+            x={index * 6}
+            y={14 - (5 + index * 4.5)}
+            width="4"
+            height={5 + index * 4.5}
+            rx="1.5"
+            className={index < PRIORITY_BARS[priority] ? undefined : 'off'}
+          />
+        ))}
+      </svg>
+      {label}
     </span>
   );
 }
@@ -215,17 +232,18 @@ export function RoleBadge({ role }: { role: Role }) {
 }
 
 const AUTH_LABEL: Record<AuthResult, string> = {
-  pass: 'pass',
-  fail: 'fail',
-  none: 'none',
-  unknown: 'unknown',
+  pass: 'aprobado',
+  fail: 'falló',
+  none: 'sin registro',
+  unknown: 'desconocido',
 };
 
+// Ninguna etiqueta dice "limpio": un error o un tipo no soportado no son seguros.
 const SCAN_LABEL: Record<ScanStatus, string> = {
-  not_detected: 'Sin detectar',
-  detected: 'Detectado',
-  unsupported: 'No compatible',
-  error: 'Error en análisis',
+  not_detected: 'Sin detección',
+  detected: 'Detectado por el antivirus',
+  unsupported: 'No escaneado',
+  error: 'Error del escáner · No disponible',
 };
 
 const SCAN_ICON: Record<ScanStatus, LucideIcon> = {
@@ -257,7 +275,7 @@ export function AuthBadge({ label, value }: { label: string; value: AuthResult }
       <span className="badge-mark">
         <Icon as={AUTH_ICON[value]} size={13} />
       </span>
-      {label}: {AUTH_LABEL[value]}
+      {label} {AUTH_LABEL[value]}
     </span>
   );
 }
