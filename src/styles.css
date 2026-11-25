@@ -3,6 +3,24 @@
    acento verde lima solo para la acción principal. El riesgo usa sus propios
    colores (alta, media, baja), que también se distinguen por luminosidad. */
 
+/* Fuentes servidas desde el propio sitio (la CSP solo permite font-src 'self').
+   Variables por peso y recortadas a latín; licencia OFL junto a cada archivo. */
+@font-face {
+  font-family: 'Plus Jakarta Sans';
+  src: url('./fonts/PlusJakartaSans-Variable.woff') format('woff');
+  font-weight: 200 800;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'JetBrains Mono';
+  src: url('./fonts/JetBrainsMono-Variable.woff') format('woff');
+  font-weight: 100 800;
+  font-style: normal;
+  font-display: swap;
+}
+
 :root {
   /* Superficies y texto */
   --color-canvas: #eceef0;
