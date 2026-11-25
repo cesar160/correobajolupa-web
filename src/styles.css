@@ -726,6 +726,11 @@ a {
   margin-block: 1.5rem;
 }
 
+.reputation-subheading {
+  font-size: 1rem;
+  margin-block: 1rem 0.5rem;
+}
+
 .reputation-list {
   list-style: none;
   display: grid;

@@ -1,4 +1,4 @@
-import type { ReputationReview } from '../api/types';
+import type { EvidenceItem, ReputationReview, RuleId } from '../api/types';
 import { formatDate } from './ui';
 
 const STATE_TEXT: Record<ReputationReview['items'][number]['state'], string> = {
@@ -10,15 +10,40 @@ const STATE_TEXT: Record<ReputationReview['items'][number]['state'], string> = {
   not_checked: 'No consultada; no significa que sea segura',
 };
 
+type FeedFinding = { ruleId: RuleId; evidence: EvidenceItem[] };
+type FeedMatch = { key: string; url: string; source: string; match: string | null; date: string | null };
+
+const FUENTES_LOCALES = ['URLhaus', 'OpenPhish'];
+
+/** Solo los R10 de listas descargadas; VirusTotal se muestra en su propia lista. */
+export function feedMatches(findings: readonly FeedFinding[]): FeedMatch[] {
+  return findings.flatMap((finding, index) => {
+    if (finding.ruleId !== 'R10') return [];
+    const value = (label: string) => finding.evidence.find((item) => item.label === label)?.value ?? null;
+    const source = value('Fuente');
+    const url = value('Enlace');
+    if (!url || !source || !FUENTES_LOCALES.some((name) => source.startsWith(name))) return [];
+    return [{
+      key: `${index}-${url}`,
+      url,
+      source,
+      match: value('Coincidencia'),
+      date: value('Fecha de la lista'),
+    }];
+  });
+}
+
 /** Solo texto: ningún resultado, ni siquiera la URL desactivada, se convierte en enlace. */
-export function ReputationPanel({ review }: { review?: ReputationReview }) {
+export function ReputationPanel({ review, findings = [] }: { review?: ReputationReview; findings?: readonly FeedFinding[] }) {
   const status = review?.status ?? 'not_configured';
+  const matches = feedMatches(findings);
   return (
     <section className="card reputation-panel">
       <h2>Reputación de enlaces</h2>
       <p className="hint">
-        Esta fuente solo consulta informes existentes. La ausencia de detecciones o de datos no demuestra que un enlace sea seguro.
+        Los informes externos solo consultan resultados existentes. La ausencia de detecciones o de datos no demuestra que un enlace sea seguro. Las listas locales se comparan solo por hashes; no se visitan los enlaces.
       </p>
+      <h3 className="reputation-subheading">Informes externos</h3>
       {status === 'not_configured' && (
         <p className="notice">Consulta externa no configurada. Las reglas locales siguen funcionando.</p>
       )}
@@ -43,6 +68,21 @@ export function ReputationPanel({ review }: { review?: ReputationReview }) {
             </li>
           ))}
         </ul>
+      )}
+      {matches.length > 0 && (
+        <>
+          <h3 className="reputation-subheading">Listas locales de reputación</h3>
+          <ul className="reputation-list" role="list">
+            {matches.map((match) => (
+              <li className="reputation-item" key={match.key}>
+                <span className="mono reputation-url">{match.url}</span>
+                <span>Fuente: {match.source}</span>
+                {match.match && <span>Coincidencia: {match.match}</span>}
+                {match.date && <span className="hint">Lista del {formatDate(match.date)} (hora local).</span>}
+              </li>
+            ))}
+          </ul>
+        </>
       )}
     </section>
   );

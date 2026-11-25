@@ -442,7 +442,7 @@ export function ReportDetailPage() {
           )}
           {!analyzing && report.status !== 'failed' && (
             <Disclosure label="Ver la reputación de los enlaces" openLabel="Ocultar la reputación">
-              <ReputationPanel review={report.reputation} />
+              <ReputationPanel review={report.reputation} findings={signals} />
             </Disclosure>
           )}
         </section>

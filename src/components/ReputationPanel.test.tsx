@@ -39,4 +39,29 @@ describe('ReputationPanel', () => {
     expect(html).not.toContain('https://sitio.example/ruta');
     expect(html).not.toContain('<a ');
   });
+
+  it('muestra las coincidencias de listas locales sin mezclarlas con VirusTotal', () => {
+    const html = renderToStaticMarkup(<ReputationPanel
+      review={{ status: 'not_configured', items: [] }}
+      findings={[
+        { ruleId: 'R10', evidence: [
+          { label: 'Enlace', value: 'hxxp://103[.]172[.]186[.]174:34864/bin.sh' },
+          { label: 'Fuente', value: 'URLhaus' },
+          { label: 'Coincidencia', value: 'URL exacta' },
+          { label: 'Fecha de la lista', value: '2026-11-25T15:46:07.246Z' },
+        ] },
+        { ruleId: 'R10', evidence: [
+          { label: 'Enlace', value: 'hxxps://otro[.]example/' },
+          { label: 'Fuente', value: 'VirusTotal (informe existente)' },
+        ] },
+        { ruleId: 'R5', evidence: [{ label: 'Enlace', value: 'hxxp://103[.]172[.]186[.]174/' }] },
+      ]}
+    />);
+    expect(html).toContain('Listas locales de reputación');
+    expect(html).toContain('Fuente: URLhaus');
+    expect(html).toContain('Coincidencia: URL exacta');
+    expect(html).toContain('hxxp://103[.]172[.]186[.]174:34864/bin.sh');
+    expect(html).not.toContain('VirusTotal (informe existente)');
+    expect(html).not.toContain('<a ');
+  });
 });

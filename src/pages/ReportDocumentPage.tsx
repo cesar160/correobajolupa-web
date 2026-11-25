@@ -85,7 +85,7 @@ export function ReportDocumentPage() {
         </p>
       ))}
 
-      {doc.status !== 'failed' && <ReputationPanel review={doc.reputation} />}
+      {doc.status !== 'failed' && <ReputationPanel review={doc.reputation} findings={doc.findings} />}
 
       <div className="doc-grid">
         <section className="card">
