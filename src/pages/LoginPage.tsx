@@ -4,7 +4,7 @@ import { Link, Navigate, useLocation, useNavigate } from 'react-router-dom';
 import { errorMessage } from '../api/client';
 import { useAuth } from '../auth/AuthContext';
 import { Icon } from '../components/Icon';
-import { InteractiveSphere } from '../components/InteractiveSphere';
+import { AuthPoints } from '../components/AuthPoints';
 import { ErrorBox } from '../components/ui';
 
 export function LoginPage() {
@@ -122,7 +122,7 @@ export function LoginPage() {
               Diseñado para identificar y documentar indicios de phishing sin abrir enlaces peligrosos.
             </p>
           </div>
-          <InteractiveSphere />
+          <AuthPoints />
         </div>
       </aside>
     </div>

@@ -1552,10 +1552,6 @@ textarea:is(:user-invalid, .user-invalid-fallback) {
   color: var(--color-on-dark-muted) !important;
 }
 
-.auth-art .sphere-area {
-  align-self: flex-end;
-}
-
 .auth-form-side {
   background: var(--color-canvas);
   display: grid;
@@ -1584,51 +1580,6 @@ textarea:is(:user-invalid, .user-invalid-fallback) {
 
 .auth-foot {
   margin-block-start: 0.75rem;
-}
-
-/* Esfera decorativa: el punto de luz sigue al cursor. */
-
-@property --sphere-light-x {
-  syntax: '<percentage>';
-  inherits: false;
-  initial-value: 32%;
-}
-
-@property --sphere-light-y {
-  syntax: '<percentage>';
-  inherits: false;
-  initial-value: 28%;
-}
-
-.sphere-area {
-  display: grid;
-  place-items: center;
-  inline-size: min(100%, 20rem);
-  block-size: 16rem;
-}
-
-.sphere {
-  inline-size: 11rem;
-  block-size: 11rem;
-  border-radius: var(--radius-control);
-  translate: var(--sphere-x, 0px) var(--sphere-y, 0px);
-  pointer-events: none;
-  background: radial-gradient(
-    circle at var(--sphere-light-x, 32%) var(--sphere-light-y, 28%),
-    #f4ffd6 0%,
-    var(--color-lime) 30%,
-    #6f8f1c 70%,
-    #1d2408 100%
-  );
-}
-
-@media (prefers-reduced-motion: no-preference) {
-  .sphere {
-    transition:
-      translate 240ms ease-out,
-      --sphere-light-x 180ms ease-out,
-      --sphere-light-y 180ms ease-out;
-  }
 }
 
 /* ---------- Filtros y tablas ---------- */
@@ -2469,9 +2420,6 @@ dialog p {
     padding: 2rem;
   }
 
-  .auth-art .sphere-area {
-    display: none;
-  }
 }
 
 /* ---------- Componentes del rediseño ---------- */
@@ -3293,4 +3241,36 @@ dialog p {
 
 .signal-body-plain {
   padding-inline-start: 2.6rem;
+}
+
+/* Principios en el panel de acceso */
+.auth-points {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  gap: 0.875rem;
+}
+
+.auth-points li {
+  display: grid;
+  grid-template-columns: 2.25rem minmax(0, 1fr);
+  gap: 0.75rem;
+  align-items: center;
+  color: var(--color-on-dark-muted);
+  font-size: 0.9375rem;
+}
+
+.auth-points strong {
+  color: #fff;
+}
+
+.auth-point-icon {
+  inline-size: 2.25rem;
+  block-size: 2.25rem;
+  display: grid;
+  place-items: center;
+  border-radius: var(--radius-control);
+  background: var(--color-dark-line);
+  color: var(--color-lime);
 }
