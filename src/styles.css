@@ -1779,11 +1779,20 @@ tbody th small,
   td:nth-child(8)::before { content: var(--label-8) ': '; }
 }
 
-/* El listado usa 4 columnas; las variables alimentan las etiquetas apiladas. */
-.reports-table {
+/* Etiquetas por defecto de las tablas apiladas. Con :where() no pesan nada,
+   así que las de cada tabla (incidentes, auditoría…) siempre ganan aunque se
+   declaren antes en el archivo. */
+:where(.reports-table) {
   --label-2: 'Fecha';
   --label-3: 'Estado';
   --label-4: 'Acción';
+}
+
+.reports-list-table {
+  --label-2: 'Prioridad';
+  --label-3: 'Fecha';
+  --label-4: 'Estado';
+  --label-5: 'Acción';
 }
 
 .users-table {
