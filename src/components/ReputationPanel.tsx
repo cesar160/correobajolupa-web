@@ -39,7 +39,7 @@ export function ReputationPanel({ review }: { review?: ReputationReview }) {
               {item.malicious !== null && item.total !== null && (
                 <span>Motores que la marcaron: {item.malicious} de {item.total}.</span>
               )}
-              {item.analyzedAt && <span className="hint">Informe del {formatDate(item.analyzedAt)} (UTC).</span>}
+              {item.analyzedAt && <span className="hint">Informe del {formatDate(item.analyzedAt)} (hora local).</span>}
             </li>
           ))}
         </ul>

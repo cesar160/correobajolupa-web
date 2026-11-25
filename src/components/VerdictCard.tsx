@@ -4,6 +4,13 @@ import { Icon } from './Icon';
 import { formatDate } from './ui';
 
 function formatEvidenceDate(value: string): string {
+  // Una fecha de calendario no representa un instante: no desplazarla según la zona del navegador.
+  if (/^\d{4}-\d{2}-\d{2}$/.test(value)) {
+    const date = new Date(value);
+    return Number.isNaN(date.getTime())
+      ? value
+      : new Intl.DateTimeFormat('es-MX', { dateStyle: 'medium', timeZone: 'UTC' }).format(date);
+  }
   return /^\d{4}-\d{2}-\d{2}/.test(value) ? formatDate(value) : value;
 }
 
