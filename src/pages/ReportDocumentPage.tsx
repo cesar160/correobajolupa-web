@@ -51,7 +51,8 @@ export function ReportDocumentPage() {
     );
   }
 
-  const actions = doc.findings.flatMap((finding) => finding.whatToDo);
+  // Varias reglas recomiendan lo mismo: cada acción se muestra una sola vez.
+  const actions = [...new Set(doc.findings.flatMap((finding) => finding.whatToDo))];
 
   return (
     <>

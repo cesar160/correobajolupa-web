@@ -3,11 +3,13 @@ import { ArrowUpRight, ListFilter, Plus, Search, Trash2 } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { api, errorMessage } from '../api/client';
 import type { ReportSummary } from '../api/types';
+import { useAuth } from '../auth/AuthContext';
 import { ConfirmDialog } from '../components/ConfirmDialog';
 import { Icon } from '../components/Icon';
-import { EmptyState, ErrorBox, Notice, PageHeader, StatusBadge } from '../components/ui';
+import { EmptyState, ErrorBox, Notice, PageHeader, PriorityBadge, StatusBadge } from '../components/ui';
 
-type Category = 'all' | 'analyzing' | 'findings' | 'clean';
+// No hay filtro «sin señales»: un reporte sin hallazgos no es un reporte seguro.
+type Category = 'all' | 'high' | 'medium' | 'low' | 'analyzing';
 
 const shortDate = (iso: string) =>
   new Intl.DateTimeFormat('es-MX', { day: '2-digit', month: 'short', year: 'numeric' }).format(
@@ -15,9 +17,11 @@ const shortDate = (iso: string) =>
   );
 
 export function ReportsPage() {
+  const { hasRole } = useAuth();
+  const analyst = hasRole('analyst', 'admin');
   const [reports, setReports] = useState<ReportSummary[]>([]);
   const [page, setPage] = useState(1);
-  const [pageSize] = useState(5);
+  const [pageSize] = useState(10);
   const [total, setTotal] = useState(0);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
@@ -61,17 +65,17 @@ export function ReportsPage() {
 
   const counts = {
     all: total,
+    high: reports.filter((r) => r.priority === 'high').length,
+    medium: reports.filter((r) => r.priority === 'medium').length,
+    low: reports.filter((r) => r.priority === 'low').length,
     analyzing: reports.filter((r) => r.status === 'queued' || r.status === 'processing').length,
-    findings: reports.filter((r) => r.findingsCount > 0).length,
-    clean: reports.filter((r) => r.findingsCount === 0 || r.status === 'limited').length,
   };
 
   const visible = useMemo(() => {
     const q = query.trim().toLowerCase();
     const list = reports.filter((report) => {
       if (category === 'analyzing' && report.status !== 'queued' && report.status !== 'processing') return false;
-      if (category === 'findings' && report.findingsCount <= 0) return false;
-      if (category === 'clean' && report.findingsCount > 0 && report.status !== 'limited') return false;
+      if ((category === 'high' || category === 'medium' || category === 'low') && report.priority !== category) return false;
       if (!q) return true;
       return [report.subject, report.fromAddress, report.id].some((value) =>
         value?.toLowerCase().includes(q),
@@ -104,16 +108,21 @@ export function ReportsPage() {
 
   const pills: Array<{ id: Category; label: string; count: number }> = [
     { id: 'all', label: 'Todos', count: counts.all },
+    { id: 'high', label: 'Riesgo alto', count: counts.high },
+    { id: 'medium', label: 'Riesgo medio', count: counts.medium },
+    { id: 'low', label: 'Riesgo bajo', count: counts.low },
     { id: 'analyzing', label: 'En análisis', count: counts.analyzing },
-    { id: 'findings', label: 'Con hallazgos', count: counts.findings },
-    { id: 'clean', label: 'Sin señales altas', count: counts.clean },
   ];
 
   return (
     <>
       <PageHeader
-        title="Mis reportes"
-        description="Consulta y organiza los mensajes que has enviado para análisis."
+        title={analyst ? 'Reportes' : 'Mis reportes'}
+        description={
+          analyst
+            ? 'Correos que enviaron los usuarios. Se borran a los 7 días.'
+            : 'Los correos que enviaste para análisis. Se borran a los 7 días.'
+        }
       />
 
       <ErrorBox message={error} />
@@ -139,7 +148,7 @@ export function ReportsPage() {
         <div className="reports-card-head">
           <div>
             <h2>Todos los reportes</h2>
-            <p className="hint">Registro de los análisis enviados desde tu cuenta.</p>
+            <p className="hint">Los filtros de prioridad y estado se aplican a la página que estás viendo.</p>
           </div>
           <span className="count-pill">{total} reportes</span>
         </div>
@@ -190,11 +199,12 @@ export function ReportsPage() {
           </EmptyState>
         ) : (
           <div className="table-wrapper" role="region" aria-labelledby="reports-caption" tabIndex={0}>
-            <table className="reports-table">
+            <table className="reports-table reports-list-table">
               <caption id="reports-caption" className="visually-hidden">Listado de reportes</caption>
               <thead>
                 <tr>
                   <th scope="col">Asunto del correo</th>
+                  <th scope="col">Prioridad</th>
                   <th scope="col">Fecha</th>
                   <th scope="col">Estado</th>
                   <th scope="col">Acción</th>
@@ -216,6 +226,9 @@ export function ReportsPage() {
                         {report.id} · {report.fromAddress ?? 'remitente desconocido'}
                       </span>
                     </th>
+                    <td>
+                      <PriorityBadge priority={report.priority} />
+                    </td>
                     <td>{shortDate(report.createdAt)}</td>
                     <td>
                       <StatusBadge status={report.status} findingsCount={report.findingsCount} />

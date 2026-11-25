@@ -1,8 +1,10 @@
 import { useCallback, useEffect, useRef, useState, type FormEvent } from 'react';
+import { MessageSquare, Plus } from 'lucide-react';
 import { Link, useParams } from 'react-router-dom';
 import { ApiError, api, errorMessage } from '../api/client';
 import type { IncidentDetail, IncidentStatus } from '../api/types';
 import { ActionsPanel } from '../components/ActionsPanel';
+import { Icon } from '../components/Icon';
 import { QuarantinePanel } from '../components/QuarantinePanel';
 import { EmptyState, ErrorBox, formatDate, Loading, Notice, PageHeader, StatusBadge, Tabs } from '../components/ui';
 
@@ -12,6 +14,27 @@ const STATUS_LABEL: Record<IncidentStatus, string> = {
   contained: 'Contenido',
   closed: 'Cerrado',
   false_positive: 'Falso positivo',
+};
+
+/** Camino normal del incidente, un paso a la vez (igual que la API). */
+const PATH: IncidentStatus[] = ['received', 'analyzing', 'contained', 'closed'];
+
+const NEXT_STEP: Partial<Record<IncidentStatus, { to: IncidentStatus; title: string; text: string }>> = {
+  received: {
+    to: 'analyzing',
+    title: 'Siguiente paso: analizar',
+    text: 'Revisa los reportes asociados y confirma los indicadores antes de buscar el correo en los buzones.',
+  },
+  analyzing: {
+    to: 'contained',
+    title: 'Siguiente paso: contener',
+    text: 'Envía a cuarentena los mensajes candidatos. Cuando no quede ninguno pendiente, pasa el incidente a Contenido.',
+  },
+  contained: {
+    to: 'closed',
+    title: 'Siguiente paso: cerrar',
+    text: 'Deja un comentario con lo que se hizo y cierra el incidente. Cerrado queda de solo lectura.',
+  },
 };
 
 export function IncidentDetailPage() {
@@ -134,32 +157,109 @@ export function IncidentDetailPage() {
       <ErrorBox message={error} />
       {notice && <Notice message={notice} />}
 
-      <div className="detail-meta">
-        <div><span className="meta-label">Estado</span><span className={`badge badge-incident-${detail.status}`}>{STATUS_LABEL[detail.status]}</span></div>
-        <div><span className="meta-label">Reportes</span><span>{detail.reportsCount}</span></div>
-        <div><span className="meta-label">Indicadores</span><span>{detail.indicatorsCount}</span></div>
-        <div><span className="meta-label">Creado por</span><span>{detail.createdBy.displayName}</span></div>
-        <div><span className="meta-label">Actualizado</span><span>{formatDate(detail.updatedAt)}</span></div>
-      </div>
-
-      <div className="filter-row">
-        <div className="field field-inline">
-          <label htmlFor="incident-status">Cambiar estado</label>
-          <select
-            id="incident-status"
-            value={detail.status}
-            onChange={(event) => void changeStatus(event.target.value as IncidentStatus)}
-          >
-            {(Object.keys(STATUS_LABEL) as IncidentStatus[]).map((value) => (
-              <option key={value} value={value}>{STATUS_LABEL[value]}</option>
-            ))}
-          </select>
+      <section className="card incident-hero" aria-label="Estado del incidente">
+        <div className="incident-hero-head">
+          <p className="hint">
+            Creado por {detail.createdBy.displayName} · {formatDate(detail.createdAt)} · {detail.reportsCount}{' '}
+            {detail.reportsCount === 1 ? 'reporte' : 'reportes'} · {detail.indicatorsCount}{' '}
+            {detail.indicatorsCount === 1 ? 'indicador' : 'indicadores'}
+          </p>
+          <span className={`badge badge-incident-${detail.status}`}>{STATUS_LABEL[detail.status]}</span>
         </div>
-      </div>
+
+        {detail.status === 'false_positive' ? (
+          <p className="notice">Marcado como falso positivo. El incidente queda de solo lectura.</p>
+        ) : (
+          <ol className="stepper" aria-label="Estados del incidente">
+            {PATH.map((step, index) => {
+              const current = PATH.indexOf(detail.status);
+              const state = index < current || detail.status === 'closed' ? 'is-done' : index === current ? 'is-current' : '';
+              return (
+                <li key={step} className={state} aria-current={index === current ? 'step' : undefined}>
+                  <span className="stepper-mark" aria-hidden="true">{index + 1}</span>
+                  {STATUS_LABEL[step]}
+                </li>
+              );
+            })}
+          </ol>
+        )}
+
+        {NEXT_STEP[detail.status] && (
+          <div className="next-step-box">
+            <div>
+              <p className="step-title">{NEXT_STEP[detail.status]?.title}</p>
+              <p className="hint">{NEXT_STEP[detail.status]?.text}</p>
+            </div>
+            <div className="next-step-actions">
+              <button
+                type="button"
+                className="btn btn-outline btn-small"
+                onClick={() => void changeStatus('false_positive')}
+              >
+                Marcar falso positivo
+              </button>
+              <button
+                type="button"
+                className="btn btn-accent btn-small"
+                onClick={() => {
+                  const next = NEXT_STEP[detail.status];
+                  if (next) void changeStatus(next.to);
+                }}
+              >
+                Pasar a {STATUS_LABEL[NEXT_STEP[detail.status]?.to ?? 'closed']}
+              </button>
+            </div>
+          </div>
+        )}
+        {detail.status === 'closed' && <p className="notice">Incidente cerrado: queda de solo lectura.</p>}
+      </section>
 
       <Tabs
         label="Secciones del incidente"
         items={[
+          {
+            id: 'linea',
+            label: 'Línea de tiempo',
+            content: (
+              <section className="card">
+                <h2>Línea de tiempo</h2>
+                <p className="hint">Más reciente primero. Los comentarios no se editan ni se borran.</p>
+                <form onSubmit={submitComment} className="comment-form">
+                  <label htmlFor="new-comment" className="visually-hidden">Nuevo comentario</label>
+                  <textarea
+                    id="new-comment"
+                    rows={3}
+                    maxLength={2000}
+                    placeholder="Escribe un comentario…"
+                    required
+                    value={comment}
+                    onChange={(event) => setComment(event.target.value)}
+                  />
+                  <button type="submit" className="btn btn-primary" disabled={saving}>Añadir comentario</button>
+                </form>
+                <ol className="timeline">
+                  {[...detail.comments].reverse().map((item) => (
+                    <li key={item.id}>
+                      <span className="timeline-mark" aria-hidden="true"><Icon as={MessageSquare} size={16} /></span>
+                      <div>
+                        <p className="timeline-title">Comentario de {item.author.displayName}</p>
+                        <p className="hint">{formatDate(item.createdAt)}</p>
+                        <p className="timeline-body">{item.body}</p>
+                      </div>
+                    </li>
+                  ))}
+                  <li>
+                    <span className="timeline-mark" aria-hidden="true"><Icon as={Plus} size={16} /></span>
+                    <div>
+                      <p className="timeline-title">Incidente creado por {detail.createdBy.displayName}</p>
+                      <p className="hint">{formatDate(detail.createdAt)}</p>
+                    </div>
+                  </li>
+                </ol>
+                <p className="hint">Las acciones de cuarentena y su resultado están en la pestaña «Acciones».</p>
+              </section>
+            ),
+          },
           {
             id: 'reportes',
             label: `Reportes (${detail.reports.length})`,
@@ -207,44 +307,6 @@ export function IncidentDetailPage() {
                         <span className="rule-id">{indicator.type}</span>
                         <span className="mono">{indicator.displayValue}</span>
                         <button type="button" className="row-action" onClick={() => void removeAssociation('indicator', indicator.id)}>Quitar</button>
-                      </li>
-                    ))}
-                  </ul>
-                )}
-              </section>
-            ),
-          },
-          {
-            id: 'comentarios',
-            label: `Comentarios (${detail.comments.length})`,
-            content: (
-              <section className="card">
-                <h2>Comentarios</h2>
-                <p className="hint">Los comentarios no se editan ni se borran.</p>
-                <form onSubmit={submitComment} className="comment-form">
-                  <label htmlFor="new-comment" className="visually-hidden">Nuevo comentario</label>
-                  <textarea
-                    id="new-comment"
-                    rows={3}
-                    maxLength={2000}
-                    placeholder="Escribe un comentario…"
-                    required
-                    value={comment}
-                    onChange={(event) => setComment(event.target.value)}
-                  />
-                  <button type="submit" className="btn btn-primary" disabled={saving}>Añadir comentario</button>
-                </form>
-                {detail.comments.length === 0 ? (
-                  <p className="hint">Todavía no hay comentarios.</p>
-                ) : (
-                  <ul className="comment-list">
-                    {detail.comments.map((item) => (
-                      <li key={item.id}>
-                        <div className="comment-head">
-                          <strong>{item.author.displayName}</strong>
-                          <span className="hint">{formatDate(item.createdAt)}</span>
-                        </div>
-                        <p>{item.body}</p>
                       </li>
                     ))}
                   </ul>
