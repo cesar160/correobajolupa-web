@@ -6,12 +6,17 @@ decisión de diseño del front, derivada del Figma beta y de la lista de funcion
 
 ## Sistema visual (referencia)
 
-- Canvas `#f5f5f7`, tarjetas `#ffffff` de 28px sin sombras, 1px `#e6e6e8`.
-- Texto `#1d1d1f`, secundario `#707070`, acento naranja `#ff4d00` solo en estados y enlaces.
-- Botones píldora negros, inputs píldora, labels uppercase, tabla compacta de 4 columnas.
-- Sidebar en escritorio; en móvil, barra compacta con menú popover.
-- Movimiento discretos con `prefers-reduced-motion`; View Transitions entre listas y detalle.
-- Todo texto de correo se escapa; enlaces y dominios siempre desactivados (`hxxp`, `[.]`).
+Rediseño "Jobgio" (noviembre de 2026):
+
+- Fondo `#eceef0`, tarjetas `#ffffff` de 28px con sombra leve y sin borde; filas internas `#f4f5f6` de 16px.
+- Texto `#121315`, secundario `#565b63`; bordes de controles `#7c818a` (3:1).
+- Barra lateral flotante con la opción activa en píldora negra y los íconos dentro de un círculo.
+- Verde lima `#c6f24e` solo para la acción principal de cada vista (botón `.btn-accent`, tarjeta destacada).
+- La prioridad tiene su propia escala (alta `#c9252d`, media `#f3b51b`, baja `#2f5fc4`) y lleva texto y barras (3, 2, 1) para leerse sin color.
+- Fuentes Plus Jakarta Sans y JetBrains Mono servidas desde `src/fonts` (la CSP solo permite `font-src 'self'`).
+- Regla para no saturar: a la vista solo lo que decide la acción; lo secundario va plegado (`Disclosure`, «Detalles técnicos»).
+- Veredicto en tres niveles derivado de los hallazgos (`src/lib/verdict.ts`): R10 o R8 «reportada como maliciosa» con fuente y fecha; otros hallazgos «sospechosa»; sin hallazgos «sin señales», que nunca significa seguro.
+- Todo texto de correo se escapa; enlaces y dominios siempre desactivados (`hxxp`, `[.]`) y nunca son `<a>`.
 
 ## Vistas implementadas (contrato 0.2.x)
 
