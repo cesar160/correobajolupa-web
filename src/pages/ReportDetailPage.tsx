@@ -427,7 +427,7 @@ export function ReportDetailPage() {
                 ))}
               </ul>
               {report.links.length > 3 && (
-                <Disclosure label={`Ver los ${report.links.length - 3} restantes`}>
+                <Disclosure label={report.links.length - 3 === 1 ? 'Ver el otro enlace' : `Ver los ${report.links.length - 3} restantes`}>
                   <ul className="link-list">
                     {report.links.slice(3).map((link, index) => (
                       <li key={`${link.defangedUrl}-r${index}`}>
@@ -440,7 +440,11 @@ export function ReportDetailPage() {
               )}
             </>
           )}
-          {!analyzing && report.status !== 'failed' && <ReputationPanel review={report.reputation} />}
+          {!analyzing && report.status !== 'failed' && (
+            <Disclosure label="Ver la reputación de los enlaces" openLabel="Ocultar la reputación">
+              <ReputationPanel review={report.reputation} />
+            </Disclosure>
+          )}
         </section>
 
         <section className="card report-section" aria-labelledby="attachments-title">

@@ -437,13 +437,14 @@ a {
 
 .search-row {
   display: flex;
-  gap: 1rem;
+  flex-wrap: wrap;
+  gap: 0.75rem;
   align-items: stretch;
   margin-block-end: 1.25rem;
 }
 
 .search-field {
-  flex: 1;
+  flex: 1 1 16rem;
   display: flex;
   align-items: center;
   gap: 0.75rem;
@@ -630,7 +631,7 @@ a {
 
 .stats-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(min(100%, 12rem), 1fr));
+  grid-template-columns: repeat(4, minmax(0, 1fr));
   gap: 1rem;
   margin-block-end: 1.25rem;
 }
@@ -1388,13 +1389,15 @@ textarea:is(:user-invalid, .user-invalid-fallback) {
 
 .password-row {
   display: flex;
+  flex-wrap: wrap;
   gap: 0.5rem;
   inline-size: 100%;
   align-items: center;
 }
 
 .password-row input {
-  flex: 1;
+  flex: 1 1 12rem;
+  min-inline-size: 0;
 }
 
 .file-name {
@@ -1600,7 +1603,6 @@ textarea:is(:user-invalid, .user-invalid-fallback) {
 .table-wrapper {
   overflow: auto;
   max-inline-size: 100%;
-  max-block-size: min(40rem, 78vh);
   container-type: inline-size;
   border: 0;
   border-radius: var(--radius-card);
@@ -1713,12 +1715,24 @@ tbody th small,
     border-radius: 0;
   }
 
+  caption {
+    display: block;
+  }
+
+  td {
+    display: grid;
+    grid-template-columns: minmax(5.5rem, 32%) minmax(0, 1fr);
+    align-items: center;
+    justify-items: start;
+    gap: 0.75rem;
+    padding-block: 0.4rem;
+  }
+
   td::before {
     content: var(--label-2) ': ';
     color: var(--color-slate);
     font-size: 0.75rem;
     font-weight: 600;
-    display: block;
   }
 
   td:nth-child(2)::before { content: var(--label-2) ': '; }
@@ -2041,6 +2055,7 @@ tbody th small,
   display: inline-flex;
   gap: 0.5rem;
   overflow-x: auto;
+  max-inline-size: 100%;
   padding: 0.25rem;
   border-radius: var(--radius-control);
   background: var(--color-surface);
@@ -2324,9 +2339,13 @@ dialog p {
   }
 }
 
-@media (max-width: 62rem) {
+@media (max-width: 70rem) {
+  .stats-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
   .app-shell {
-    grid-template-columns: 1fr;
+    grid-template-columns: minmax(0, 1fr);
     gap: 1rem;
     padding: 0.75rem;
   }
@@ -3231,6 +3250,25 @@ dialog p {
   overflow-wrap: anywhere;
 }
 
+/* Pantallas angostas: cifras compactas en dos columnas */
+@media (max-width: 40rem) {
+  .stat-card {
+    padding: 1rem;
+  }
+
+  .stat-number {
+    font-size: 1.75rem;
+  }
+
+  .stat-caption {
+    display: none;
+  }
+
+  .auth-form-inner {
+    padding: 1.5rem;
+  }
+}
+
 /* Señales del resultado para quien reportó (sin ID de regla) */
 .signal-dot {
   inline-size: 0.625rem;
@@ -3273,4 +3311,56 @@ dialog p {
   border-radius: var(--radius-control);
   background: var(--color-dark-line);
   color: var(--color-lime);
+}
+
+/* Teléfonos estrechos: en la barra superior queda solo la marca, sin el nombre */
+@media (max-width: 26rem) {
+  .sidebar .brand {
+    font-size: 0;
+    gap: 0;
+  }
+
+  .sidebar-brand {
+    min-inline-size: 0;
+  }
+}
+
+/* Pantallas anchas: el contenido se centra en su columna */
+@media (min-width: 70.01rem) {
+  .main-content {
+    inline-size: 100%;
+    margin-inline: auto;
+  }
+}
+
+/* Ventanas bajas (portátiles de 720 px): la barra lateral se compacta para que
+   la tarjeta de usuario siga a la vista */
+@media (min-width: 70.01rem) and (max-height: 50rem) {
+  .sidebar {
+    gap: 1.25rem;
+    padding-block: 1.25rem;
+  }
+
+  .sidebar-nav {
+    gap: 0.125rem;
+  }
+
+  .sidebar-nav a {
+    min-block-size: 2.5rem;
+    font-size: 0.875rem;
+  }
+
+  .sidebar-nav a > svg {
+    padding: 0.45rem;
+  }
+
+  .logout-link {
+    margin-block-start: 0.5rem;
+  }
+}
+
+@media (max-width: 70rem) {
+  caption {
+    inline-size: 100%;
+  }
 }

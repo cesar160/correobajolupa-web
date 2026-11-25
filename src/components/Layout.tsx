@@ -201,11 +201,6 @@ export function Layout() {
       </aside>
 
       <main id="contenido-principal" tabIndex={-1} className="main-content">
-        <div className="content-topbar">
-          <span className="role-badge">
-            {user ? ROLE_LABEL[user.role] : 'Reportante'}
-          </span>
-        </div>
         <ErrorBox message={error} />
         <Outlet />
       </main>
