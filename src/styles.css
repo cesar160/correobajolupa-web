@@ -3282,3 +3282,15 @@ dialog p {
   font-size: 0.9375rem;
   overflow-wrap: anywhere;
 }
+
+/* Señales del resultado para quien reportó (sin ID de regla) */
+.signal-dot {
+  inline-size: 0.625rem;
+  block-size: 0.625rem;
+  border-radius: var(--radius-control);
+  background: var(--color-ink);
+}
+
+.signal-body-plain {
+  padding-inline-start: 2.6rem;
+}

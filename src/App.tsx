@@ -1,6 +1,7 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState, type ReactNode } from 'react';
 import { flushSync } from 'react-dom';
 import { Link, Navigate, Route, Routes, useLocation, type Location } from 'react-router-dom';
+import { useAuth } from './auth/AuthContext';
 import { ProtectedRoute } from './auth/ProtectedRoute';
 import { Layout } from './components/Layout';
 import { CandidatesPage } from './pages/CandidatesPage';
@@ -18,6 +19,7 @@ import { NewReportPage } from './pages/NewReportPage';
 import { RegisterPage } from './pages/RegisterPage';
 import { ReportDetailPage } from './pages/ReportDetailPage';
 import { ReportDocumentPage } from './pages/ReportDocumentPage';
+import { ReporterReportPage } from './pages/ReporterReportPage';
 import { ReportsPage } from './pages/ReportsPage';
 import { UsersPage } from './pages/UsersPage';
 
@@ -31,6 +33,17 @@ function NotFound() {
       </Link>
     </div>
   );
+}
+
+/** El reportante ve su resultado en lenguaje simple; el analista, el detalle completo. */
+function ReportByRole() {
+  const { hasRole } = useAuth();
+  return hasRole('analyst', 'admin') ? <ReportDetailPage /> : <ReporterReportPage />;
+}
+
+/** Vistas que la API solo permite a analistas y administradores. */
+function AnalystOnly({ children }: { children: ReactNode }) {
+  return <ProtectedRoute roles={['analyst', 'admin']}>{children}</ProtectedRoute>;
 }
 
 function AnimatedRoutes() {
@@ -68,16 +81,16 @@ function AnimatedRoutes() {
         <Route path="/reports" element={<ReportsPage />} />
         <Route path="/reports/new" element={<NewReportPage />} />
         <Route path="/reports/:id/informe" element={<ReportDocumentPage />} />
-        <Route path="/reports/:id" element={<ReportDetailPage />} />
+        <Route path="/reports/:id" element={<ReportByRole />} />
         <Route path="/indicators" element={<IndicatorsPage />} />
-        <Route path="/indicators/:id/candidates" element={<CandidatesPage />} />
-        <Route path="/exclusions" element={<ExclusionsPage />} />
-        <Route path="/mailboxes" element={<MailboxesPage />} />
-        <Route path="/messages" element={<MessagesPage />} />
-        <Route path="/messages/:id" element={<MessageDetailPage />} />
-        <Route path="/incidents" element={<IncidentsPage />} />
-        <Route path="/incidents/:id" element={<IncidentDetailPage />} />
-        <Route path="/audit" element={<AuditPage />} />
+        <Route path="/indicators/:id/candidates" element={<AnalystOnly><CandidatesPage /></AnalystOnly>} />
+        <Route path="/exclusions" element={<AnalystOnly><ExclusionsPage /></AnalystOnly>} />
+        <Route path="/mailboxes" element={<AnalystOnly><MailboxesPage /></AnalystOnly>} />
+        <Route path="/messages" element={<AnalystOnly><MessagesPage /></AnalystOnly>} />
+        <Route path="/messages/:id" element={<AnalystOnly><MessageDetailPage /></AnalystOnly>} />
+        <Route path="/incidents" element={<AnalystOnly><IncidentsPage /></AnalystOnly>} />
+        <Route path="/incidents/:id" element={<AnalystOnly><IncidentDetailPage /></AnalystOnly>} />
+        <Route path="/audit" element={<AnalystOnly><AuditPage /></AnalystOnly>} />
         <Route
           path="/users"
           element={
