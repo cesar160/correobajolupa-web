@@ -210,7 +210,6 @@ a {
 }
 
 .sidebar-eyebrow,
-.role-badge,
 .meta-label {
   font-size: 0.6875rem;
   font-weight: 700;
@@ -362,16 +361,6 @@ a {
   padding: 0.5rem 0.75rem 4rem 0;
 }
 
-.content-topbar {
-  display: flex;
-  justify-content: flex-end;
-  margin-block-end: 1.5rem;
-}
-
-.site-footer {
-  display: none;
-}
-
 /* ---------- Encabezados y superficies ---------- */
 
 .page-header {
@@ -399,7 +388,6 @@ a {
 .filter-bar,
 .auth-panel,
 .detail-meta,
-.finding-card,
 .password-strength,
 .empty-state,
 .text-view,
@@ -415,11 +403,6 @@ a {
 }
 
 /* Tarjeta destacada (una por pantalla) y tarjeta oscura para la acción. */
-.card-accent {
-  background: var(--color-lime);
-  color: var(--color-lime-ink);
-  box-shadow: var(--shadow-pop);
-}
 
 .card-dark {
   background: var(--color-ink);
@@ -576,59 +559,6 @@ a {
 
 /* Panel principal */
 
-.hero-card {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 2rem;
-  flex-wrap: wrap;
-  padding: 2rem 2.25rem;
-  margin-block-end: 1.25rem;
-  border-radius: 36px;
-  background: var(--color-lime);
-  color: var(--color-lime-ink);
-  box-shadow: var(--shadow-pop);
-}
-
-.hero-eyebrow {
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-  margin-block-end: 1rem;
-  color: var(--color-lime-ink);
-  font-size: 0.6875rem;
-  font-weight: 700;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-}
-
-.hero-dot {
-  inline-size: 0.4rem;
-  block-size: 0.4rem;
-  border-radius: var(--radius-control);
-  background: var(--color-ink);
-}
-
-.hero-card h2 {
-  max-inline-size: 22ch;
-}
-
-.hero-card > div > p:last-child {
-  margin-block-start: 0.6rem;
-  color: var(--color-lime-ink);
-  font-size: 0.9375rem;
-  max-inline-size: 52ch;
-}
-
-.btn-light {
-  background: var(--color-ink);
-  color: #fff;
-}
-
-.btn-light:hover {
-  background: #000;
-}
-
 .stats-grid {
   display: grid;
   grid-template-columns: repeat(4, minmax(0, 1fr));
@@ -694,12 +624,6 @@ a {
   gap: 1rem;
   flex-wrap: wrap;
   margin-block-end: 1.25rem;
-}
-
-.recent-table {
-  --label-2: 'Fecha';
-  --label-3: 'Estado';
-  --label-4: 'Ver';
 }
 
 .recent-note {
@@ -945,8 +869,7 @@ a {
   color: var(--color-slate);
 }
 
-.assoc-list,
-.comment-list {
+.assoc-list {
   list-style: none;
   margin: 1rem 0 0;
   padding: 0;
@@ -954,8 +877,7 @@ a {
   gap: 0.5rem;
 }
 
-.assoc-list li,
-.comment-list li {
+.assoc-list li {
   display: flex;
   align-items: center;
   gap: 0.85rem;
@@ -979,18 +901,6 @@ a {
 
 .comment-form textarea {
   inline-size: 100%;
-}
-
-.comment-head {
-  display: flex;
-  align-items: baseline;
-  gap: 0.75rem;
-  flex-wrap: wrap;
-}
-
-.comment-list li {
-  display: grid;
-  gap: 0.4rem;
 }
 
 .quarantine-panel {
@@ -1331,8 +1241,7 @@ a {
   margin-block-end: 0;
 }
 
-label,
-.field-label {
+label {
   font-size: 0.75rem;
   font-weight: 700;
   letter-spacing: 0.06em;
@@ -1678,8 +1587,7 @@ tbody tr:hover td {
   background: var(--color-hairline);
 }
 
-tbody th small,
-.cell-id {
+tbody th small {
   display: block;
   margin-block-start: 0.15rem;
   color: var(--color-slate);
@@ -1778,14 +1686,6 @@ tbody th small,
   --label-2: 'Tipos';
   --label-3: 'Tamaño';
   --label-4: 'Escaneo';
-}
-
-.attachments-card {
-  padding: 1.5rem;
-}
-
-.attachments-card > .hint {
-  margin-block: 0.5rem 1rem;
 }
 
 .checkbox-inline {
@@ -1953,23 +1853,6 @@ tbody th small,
   margin-block: 0.75rem;
 }
 
-.finding-list {
-  list-style: none;
-  padding: 0;
-  margin: 0;
-  display: grid;
-  gap: 0.75rem;
-}
-
-.finding-card {
-  display: grid;
-  gap: 0.6rem;
-  padding: 1.25rem;
-  background: var(--color-frost);
-  border-radius: var(--radius-row);
-  box-shadow: none;
-}
-
 .rule-id {
   display: inline-grid;
   place-items: center;
@@ -1988,16 +1871,6 @@ tbody th small,
   color: var(--color-slate);
   font-family: var(--font-mono);
   font-size: 0.75rem;
-}
-
-.finding-card h3 {
-  margin: 0;
-}
-
-.finding-card p {
-  color: var(--color-slate);
-  font-size: 0.875rem;
-  margin-block-start: 0.35rem;
 }
 
 .evidence-list {
@@ -2038,12 +1911,6 @@ tbody th small,
   inline-size: 100%;
   min-block-size: 34rem;
   background: var(--color-surface);
-}
-
-.security-note {
-  margin-block-start: 1.5rem;
-  color: var(--color-slate);
-  font-size: 0.8125rem;
 }
 
 /* ---------- Pestañas segmentadas ---------- */
