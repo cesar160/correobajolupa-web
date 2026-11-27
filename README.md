@@ -3,7 +3,7 @@
 Frontend de **CorreoBajoLupa**: análisis explicable de correos sospechosos. React + Vite +
 TypeScript, servido en producción por nginx con un proxy inverso para `/api`.
 
-> El contrato de la API vive en el repo `correobajolupa-api/contract/openapi.json` (v0.2.0).
+> El contrato de la API vive en el repo `correobajolupa-api/contract/openapi.json` (v0.4.0).
 > **El contrato no define vistas**; el mapa acordado está en [`docs/vistas.md`](docs/vistas.md).
 
 ## Requisitos
@@ -83,7 +83,7 @@ publica 80/443 en la instancia; hasta entonces este es el montaje local.
 
 ## Tipos de la API
 
-Los tipos se generan desde `contract/openapi.json` v0.3.0 del repo de la API. El archivo
+Los tipos se generan desde `contract/openapi.json` v0.4.0 del repo de la API. El archivo
 generado es `src/api/schema.d.ts`; `src/api/types.ts` solo define alias con los nombres que usa
 el front. Cuando el contrato cambie:
 
@@ -96,10 +96,10 @@ El repo de la API debe estar clonado como carpeta hermana (`../correobajolupa-ap
 
 ## Estado
 
-El front cubre el contrato v0.3.0 completo (M0 a M7). El back sirve hoy M0, M1 y M2
-(adjuntos con ClamAV); las rutas de M3 a M7 están declaradas en el contrato pero todavía no
-se implementan en la API, así que se prueba con un servidor simulado. El visor HTML requiere
-que la ruta `/reports/{id}/html` no envíe `X-Frame-Options: DENY` (ver 0.2.2 del contrato).
+El front cubre el contrato v0.4.0 (M0 a M7 y reglas R9/R10). El back implementa M0 a M7 y el
+análisis de URL: heurísticas locales (R9), listas de reputación descargadas (R10, URLhaus y
+OpenPhish) y consulta opcional a VirusTotal. El visor HTML requiere que la ruta
+`/reports/{id}/html` no envíe `X-Frame-Options: DENY` (ver 0.2.2 del contrato).
 
 ## Repositorio
 
